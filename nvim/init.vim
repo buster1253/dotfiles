@@ -8,18 +8,27 @@ set tabstop=4
 set shiftwidth=4
 set expandtab
 
+
+au VimEnter * !xmodmap -e 'clear Lock' -e 'keycode 0x42 = Escape'
+au VimLeave * !xmodmap -e 'clear Lock' -e 'keycode 0x42 = Caps_Lock'
+
 "line Number
 set nu
 
 " Specify a directory for plugins
 " - For Neovim: ~/.local/share/nvim/plugged
 " - Avoid using standard Vim directory names like 'plugin'
-call plug#begin('~/.vim/plugged')
+call plug#begin('~/.local/share/nvim/plugged')
 
 " Make sure you use single quotes
 
 " Shorthand notation; fetches https://github.com/junegunn/vim-easy-align
 Plug 'junegunn/vim-easy-align'
+
+Plug 'junegunn/fzf.vim', {'do':'install --all'}
+
+Plug 'terryma/vim-multiple-cursors'
+
 
 " Any valid git URL is allowed
 Plug 'https://github.com/junegunn/vim-github-dashboard.git'
@@ -72,11 +81,8 @@ Plug 'jiangmiao/auto-pairs'
 " Initialize plugin system
 call plug#end()
 
-set t_Co=256
-
 let g:plug_timeout = 200
 
-let g:Powerline_symbols = "fancy"
 let g:airline_powerline_fonts = 1
 
 set laststatus=2
@@ -90,3 +96,6 @@ colorscheme nord
 
 let g:nord_italic_comments = 1
 highlight Comment cterm=italic
+
+set directory=$HOME/.vim/swap//
+
