@@ -1,17 +1,75 @@
+"""""""""""""""""""
+" NeoVim Settings "
+"""""""""""""""""""
 
+" vimwiki settings
 
+set nocompatible
+filetype plugin on
+syntax on
 
-" Tab length:
+" /vimwiki settings
+
+" theme settings
+    " Solarized "
+    " Nord "
+    " colorscheme nord
+    " let g:nord_italic_comments = 1
+    " Airline bar "
+    let g:airline_solarized_bg='dark'
+    let g:airline_theme='solarized'
+    set termguicolors
+    " NeoSolarized
+    set background=dark
+    colorscheme NeoSolarized
+
+" Always show status bar    
+set laststatus=2
+" /theme settings
+
+let g:plug_timeout = 200
+
+let g:airline_powerline_fonts = 1
+
+" Ale/Linter settings
+let g:ale_typescript_tslint_config_path = '/home/petter/tslint.json'
+let g:ale_typescript_tslint_use_global = 1
+let g:ale_linters = {
+\	'javascript': ['eslint'],
+\	'typescript': ['tslint']
+\}
+let g:ale_fixers = {
+\	'typescript': ['tslint']
+\}
+let g:airline#extensions#ale#enabled = 1
+" YCM settings
+let g:ycm_min_num_of_chars_for_comepletion = 2
+
+highlight Comment cterm=italic
+
+set directory=$HOME/.vim/swap//
+
+" Tab length
 
 filetype plugin indent on
 set tabstop=4
 set shiftwidth=4
-set expandtab
 
+" /Tab length
 
+" NERDTree
+" Autoclose vim if NERDTree is only open window
+autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
+" /NERDTree
+
+" swap escape and caps-lock when entering vim
 au VimEnter * !xmodmap -e 'clear Lock' -e 'keycode 0x42 = Escape'
+au VimEnter * !xmodmap -e 'clear Lock' -e 'keycode 0x9 = Caps_Lock'
+" rebind escape and caps-lock when leaving vim 
 au VimLeave * !xmodmap -e 'clear Lock' -e 'keycode 0x42 = Caps_Lock'
+au VimLeave * !xmodmap -e 'clear Lock' -e 'keycode 0x9 = Escape'
 
+let mapleader = ","
 "line Number
 set nu
 
@@ -30,16 +88,12 @@ Plug 'junegunn/fzf.vim', {'do':'install --all'}
 Plug 'terryma/vim-multiple-cursors'
 
 
-" Any valid git URL is allowed
-Plug 'https://github.com/junegunn/vim-github-dashboard.git'
-
 " Multiple Plug commands can be written in a single line using | separators
 Plug 'SirVer/ultisnips' | Plug 'honza/vim-snippets'
 
 " On-demand loading
 Plug 'scrooloose/nerdtree', { 'on':  'NERDTreeToggle' }
-Plug 'tpope/vim-fireplace', { 'for': 'clojure' }
-
+Plug 'Xuyuanp/nerdtree-git-plugin'
 " Using a non-master branch
 Plug 'rdnetto/YCM-Generator', { 'branch': 'stable' }
 
@@ -52,8 +106,10 @@ Plug 'nsf/gocode', { 'tag': 'v.20150303', 'rtp': 'vim' }
 " Plugin outside ~/.vim/plugged with post-update hook
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 
-" Nord theme vim
+" Themes
 Plug 'arcticicestudio/nord-vim'
+Plug 'icymind/NeoSolarized'
+" /Themes
 
 " Vim-airline for powerline
 Plug 'vim-airline/vim-airline'
@@ -61,7 +117,7 @@ Plug 'vim-airline/vim-airline-themes'
 
 " Linter
 Plug 'w0rp/ale'
-
+Plug 'palantir/tslint'
 " Autocomplete / complete framework
 Plug 'valloric/youcompleteme'
 
@@ -78,24 +134,8 @@ Plug 'tpope/vim-fugitive'
 " AutoPair
 Plug 'jiangmiao/auto-pairs'
 
+Plug 'vimwiki/vimwiki'
 " Initialize plugin system
 call plug#end()
 
-let g:plug_timeout = 200
-
-let g:airline_powerline_fonts = 1
-
-set laststatus=2
-
-" YCM settings"
-let g:ycm_min_num_of_chars_for_comepletion = 2
-
-" Theme:
-
-colorscheme nord
-
-let g:nord_italic_comments = 1
-highlight Comment cterm=italic
-
-set directory=$HOME/.vim/swap//
 
