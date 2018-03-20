@@ -1,0 +1,16 @@
+{
+    "defaultSeverity": "error",
+    "extends": [
+        "tslint:recommended"
+    ],
+    "jsRules": {},
+	"rules": {
+		"indent": [true, "tabs", 2],
+		"variable-name": [true, "check-format", "allow-snake-case", "allow-leading-underscores"],
+		"space-before-function-paren": [true, "always"],
+		"space-within-parens": [false],
+		"curly": true,
+		"no-console": false
+	},
+    "rulesDirectory": ["/home/petter/.config/tslint/rules/some.json"]
+}
