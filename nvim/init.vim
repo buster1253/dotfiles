@@ -7,18 +7,16 @@
 set nocompatible
 filetype plugin on
 syntax on
+let g:vimwiki_list = [{'path':'~/vimwiki/',
+					 \ 'syntax': 'markdown', 'ext':'.md'}]
 
 " /vimwiki settings
 
 " theme settings
-    " Solarized "
+set termguicolors
     " Nord "
     " colorscheme nord
     " let g:nord_italic_comments = 1
-    " Airline bar "
-    let g:airline_solarized_bg='dark'
-    let g:airline_theme='solarized'
-    set termguicolors
     " NeoSolarized
     set background=dark
     colorscheme NeoSolarized
@@ -29,19 +27,32 @@ set laststatus=2
 
 let g:plug_timeout = 200
 
-let g:airline_powerline_fonts = 1
 
 " Ale/Linter settings
+
 let g:ale_typescript_tslint_config_path = '/home/petter/tslint.json'
 let g:ale_typescript_tslint_use_global = 1
+" Set language specific linters
 let g:ale_linters = {
 \	'javascript': ['eslint'],
 \	'typescript': ['tslint']
 \}
+" Set language specific fixers
 let g:ale_fixers = {
 \	'typescript': ['tslint']
 \}
+
+" /Ale/Linter settings
+""""""""""""""""""""
+" Airline settings "
+""""""""""""""""""""
+let g:airline_solarized_bg='dark'
+let g:airline_theme='solarized'
+let g:airline_powerline_fonts = 1
 let g:airline#extensions#ale#enabled = 1
+"""""""""""""""""""""
+" /Airline settings "
+"""""""""""""""""""""		
 " YCM settings
 let g:ycm_min_num_of_chars_for_comepletion = 2
 
@@ -135,6 +146,8 @@ Plug 'tpope/vim-fugitive'
 Plug 'jiangmiao/auto-pairs'
 
 Plug 'vimwiki/vimwiki'
+
+Plug 'plasticboy/vim-markdown'
 " Initialize plugin system
 call plug#end()
 
