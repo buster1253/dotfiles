@@ -83,7 +83,14 @@ au VimLeave * !xmodmap -e 'clear Lock' -e 'keycode 0x9 = Escape'
 let mapleader = ","
 "line Number
 set nu
-
+""""""""""""
+" markdown "
+""""""""""""
+let vim_markdown_preview_hotkey='<C-z>'
+let vim_markdown_preview_browser='Firefox Developer Edition'
+"""""""""""""
+" /markdown "
+"""""""""""""
 " Specify a directory for plugins
 " - For Neovim: ~/.local/share/nvim/plugged
 " - Avoid using standard Vim directory names like 'plugin'
@@ -148,6 +155,18 @@ Plug 'jiangmiao/auto-pairs'
 Plug 'vimwiki/vimwiki'
 
 Plug 'plasticboy/vim-markdown'
+
+function! BuildComposer(info)
+  if a:info.status != 'unchanged' || a:info.force
+    if has('nvim')
+      !cargo build --release
+    else
+      !cargo build --release --no-default-features --features json-rpc
+    endif
+  endif
+endfunction
+
+Plug 'euclio/vim-markdown-composer', { 'do': function('BuildComposer') }
 " Initialize plugin system
 call plug#end()
 
