@@ -15,15 +15,17 @@ let g:vimwiki_list = [{'path':'~/vimwiki/',
 " theme settings
 set termguicolors
     " Nord "
-	" colorscheme nord
-    "let g:nord_italic_comments = 1
+	let g:nord_italic = 1
+	let g:nord_italic_comments = 1
+	let g:nord_comment_brightness = 15
+	colorscheme nord
     " NeoSolarized
     " set background=dark
     " colorscheme NeoSolarized
 	" Oceanic-next "
-	colorscheme OceanicNext
-	let g:oceanic_next_terminal_bold = 1
-	let g:oceanic_next_terminal_italic = 1
+	" colorscheme OceanicNext
+	" let g:oceanic_next_terminal_bold = 1
+	" let g:oceanic_next_terminal_italic = 1
 	" "
 " Always show status bar    
 set laststatus=2
@@ -51,7 +53,7 @@ let g:ale_fixers = {
 " Airline settings "
 """"""""""""""""""""
 let g:airline_solarized_bg='dark'
-let g:airline_theme='oceanicnext'
+let g:airline_theme='nord'
 let g:airline_powerline_fonts = 1
 let g:airline#extensions#ale#enabled = 1
 """""""""""""""""""""
