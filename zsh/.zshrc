@@ -4,6 +4,7 @@
 # Path to oh-my-zsh installation.
 export ZPLUG_HOME=/home/petter/.config/zplug
 export LANG="en_US.UTF-8"
+export EDITOR='vim'
 
 # Load custom keys, should probably be moved. //TODO
 if [ -f ~/.config/custom_key_maps ]; then
