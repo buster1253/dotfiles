@@ -3,7 +3,7 @@
 #FLAGS
 COMP_TYPE=0 # 0 = not set, 1 = Desktop, 2 = Laptop
 I3_FLAG=false
-I3_LOCATION=$HOME/.config/i3/
+I3_LOCATION=$HOME/.config/i3/ #Default directory
 
 print_help() {
 	echo "Config_install.sh command menu"
@@ -40,7 +40,22 @@ i3_install() {
 		echo "Please specify installation type: -D (desktop), -L (Laptop)"
 		exit
 	fi
-	#`cat $HOME/.config/i3/config.desktop > $HOME/.config/i3/config`
+}
+
+## i3status_rust 
+
+i3status_rust_install() {
+	if [ $COMP_TYPE > 0 ]; then
+		if [ $COMP_TYPE = 1 ]; then
+			## Desktop
+			`cat $I3SR_LOCATION/config.`
+		elif [ $COMP_TYPE = 2 ]; then
+			## Laptop
+		fi
+	else 
+		echo "Damn"
+		exit 1
+	fi
 }
 
 ### MAIN ###
@@ -61,6 +76,10 @@ while [ "$1" != "" ]; do
 			shift
 			I3_PATH="$1"
 			echo "Installing I3 to: $I3_PATH"
+			;;
+		-s | --i3sr | --i3-status-rust )
+			#i3status_rust
+			echo "Coming soon"
 			;;
 		-h | --help )
 			print_help

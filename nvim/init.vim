@@ -27,8 +27,12 @@ set termguicolors
 	" let g:oceanic_next_terminal_bold = 1
 	" let g:oceanic_next_terminal_italic = 1
 	" "
+" /theme settings
+
+
 " Always show status bar    
 set laststatus=2
+set statusline=%{fugitive#statusline()}
 " /theme settings
 
 let g:plug_timeout = 200
