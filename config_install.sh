@@ -48,7 +48,7 @@ i3status_rust_install() {
 	if [ $COMP_TYPE > 0 ]; then
 		if [ $COMP_TYPE = 1 ]; then
 			## Desktop
-			`cat $I3SR_LOCATION/config.`
+			`cat $I3SR_LOCATION/.config/config.default`
 		elif [ $COMP_TYPE = 2 ]; then
 			## Laptop
 		fi
