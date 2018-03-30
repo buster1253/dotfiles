@@ -10,3 +10,4 @@
 !termite/config
 !i3status_rust/*
 !zsh/*
+!custom_key_maps
