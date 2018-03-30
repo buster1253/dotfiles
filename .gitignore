@@ -5,8 +5,8 @@
 # Whitelist
 
 !README.md
-!i3/
+!i3/*
 !nvim/init.vim
-!termite/
+!termite/config
 !i3status_rust/*
 !zsh/*
