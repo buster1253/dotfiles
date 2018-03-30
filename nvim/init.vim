@@ -81,12 +81,12 @@ autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isT
 " /NERDTree
 
 " swap escape and caps-lock when entering vim
-au VimEnter * !xmodmap -e 'clear Lock' -e 'keycode 0x42 = Escape'
-au VimEnter * !xmodmap -e 'clear Lock' -e 'keycode 0x9 = Caps_Lock'
+"au VimEnter * !xmodmap -e 'clear Lock' -e 'keycode 0x42 = Escape'
+"au VimEnter * !xmodmap -e 'clear Lock' -e 'keycode 0x9 = Caps_Lock'
 " rebind escape and caps-lock when leaving vim 
-au VimLeave * !xmodmap -e 'clear Lock' -e 'keycode 0x42 = Caps_Lock'
-au VimLeave * !xmodmap -e 'clear Lock' -e 'keycode 0x9 = Escape'
-
+"au VimLeave * !xmodmap -e 'clear Lock' -e 'keycode 0x42 = Caps_Lock'
+"au VimLeave * !xmodmap -e 'clear Lock' -e 'keycode 0x9 = Escape'
+"
 let mapleader = ","
 "line Number
 set nu
