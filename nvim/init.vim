@@ -95,6 +95,7 @@ set nu
 """"""""""""
 let vim_markdown_preview_hotkey='<C-z>'
 let vim_markdown_preview_browser='Firefox Developer Edition'
+let g:markdown_composer_browser='firefox-developer-edition'
 """""""""""""
 " /markdown "
 """""""""""""

@@ -8,5 +8,5 @@
 !i3/
 !nvim/init.vim
 !termite/
-!i3status_rust/
-!zsh/
+!i3status_rust/*
+!zsh/*

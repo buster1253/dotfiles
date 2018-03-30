@@ -3,6 +3,7 @@
 
 # Path to oh-my-zsh installation.
 export ZPLUG_HOME=/home/petter/.config/zplug
+export LANG="en_US.UTF-8"
 
 
 # Install zplug if not installed
