@@ -1,0 +1,12 @@
+
+# Ignore it all
+*
+
+# Whitelist
+
+!README.md
+!i3/
+!nvim/init.vim
+!termite/
+!i3status_rust/
+!zsh/
