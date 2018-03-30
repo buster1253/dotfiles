@@ -5,9 +5,11 @@
 # Whitelist
 
 !README.md
+!i3/
 !i3/*
 !nvim/init.vim
 !termite/config
+!i3status_rust/
 !i3status_rust/*
 !zsh/*
 !custom_key_maps
