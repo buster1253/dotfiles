@@ -6,11 +6,6 @@ export ZPLUG_HOME=/home/petter/.config/zplug
 export LANG="en_US.UTF-8"
 export EDITOR='vim'
 
-# Load custom keys, should probably be moved. //TODO
-if [ -f ~/.config/custom_key_maps ]; then
-	xmodmap $HOME/.config/custom_key_maps
-fi
-
 # Install zplug if not installed
 [ ! -d ~/.config/zplug ] && git clone https://github.com/zplug/zplug ~/.config/zplug
 source ~/.config/zplug/init.zsh

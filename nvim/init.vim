@@ -100,6 +100,7 @@ set nu
 let vim_markdown_preview_hotkey='<C-z>'
 let vim_markdown_preview_browser='Firefox Developer Edition'
 let g:markdown_composer_browser='firefox-developer-edition'
+let g:markdown_composer_custom_css=['file:///home/petter/.local/share/plugged/github-css/github-markdown.css']
 """""""""""""
 " /markdown "
 """""""""""""
@@ -168,6 +169,9 @@ Plug 'jiangmiao/auto-pairs'
 Plug 'vimwiki/vimwiki'
 
 Plug 'plasticboy/vim-markdown'
+
+Plug 'sindresorhus/github-markdown-css', { 'branch': 'gh-pages', 'as': 'github-css' }
+
 
 function! BuildComposer(info)
   if a:info.status != 'unchanged' || a:info.force
