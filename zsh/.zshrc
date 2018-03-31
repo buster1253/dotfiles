@@ -135,6 +135,7 @@ POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=(vi_mode history)
 alias vi='nvim'
 alias vim='nvim'
 alias ls='ls --color=auto'
+alias pac='sudo pacman'
 # Vi mode
 bindkey -v
 

@@ -40,12 +40,15 @@ let g:plug_timeout = 200
 
 " Ale/Linter settings
 
+let g:ale_sh_shell_default_shell = 'bash'
+
 let g:ale_typescript_tslint_config_path = '/home/petter/tslint.json'
 let g:ale_typescript_tslint_use_global = 1
 " Set language specific linters
 let g:ale_linters = {
 \	'javascript': ['eslint'],
-\	'typescript': ['tslint']
+\	'typescript': ['tslint'],
+\	'sh': ['shellcheck']
 \}
 " Set language specific fixers
 let g:ale_fixers = {
@@ -186,5 +189,4 @@ endfunction
 Plug 'euclio/vim-markdown-composer', { 'do': function('BuildComposer') }
 " Initialize plugin system
 call plug#end()
-
 
