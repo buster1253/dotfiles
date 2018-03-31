@@ -14,3 +14,6 @@ ZDOTDIR=/path/to/where/you/want/.zshrc
 ~/.xinitrc
 [[ -f ~/path/to/key_map ]] && xmodmap ~/path/to/key_map
 ```
+
+## Shit I might forget to install:
+* shellcheck(pacman) - Ale Bash linter
