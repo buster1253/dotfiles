@@ -10,7 +10,7 @@
 !i3/config.laptop
 !nvim/init.vim
 !termite/config
-!i3status_rust/
-!i3status_rust/*
+!i3status_rust/config.toml.desktop
+!i3status_rust/config.toml.laptop
 !zsh/*
 !custom_key_maps
