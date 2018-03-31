@@ -4,7 +4,7 @@
 # Path to oh-my-zsh installation.
 export ZPLUG_HOME=/home/petter/.config/zplug
 export LANG="en_US.UTF-8"
-export EDITOR='vim'
+export EDITOR='nvim'
 
 # Install zplug if not installed
 [ ! -d ~/.config/zplug ] && git clone https://github.com/zplug/zplug ~/.config/zplug
