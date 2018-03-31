@@ -5,7 +5,9 @@
 # Whitelist
 
 !README.md
-!i3/*
+!i3/config.desktop
+!i3/config.default
+!i3/config.laptop
 !nvim/init.vim
 !termite/config
 !i3status_rust/*
