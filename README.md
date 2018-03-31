@@ -5,5 +5,12 @@
 ```
 ZDOTDIR=/path/to/where/you/want/.zshrc
 ```
-3. Move config files
-4. Enjoy
+1. Move config files
+2. Enjoy
+
+
+## Keymap
+```
+~/.xinitrc
+[[ -f ~/path/to/key_map ]] && xmodmap ~/path/to/key_map
+```
