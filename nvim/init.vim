@@ -175,6 +175,8 @@ Plug 'plasticboy/vim-markdown'
 
 Plug 'sindresorhus/github-markdown-css', { 'branch': 'gh-pages', 'as': 'github-css' }
 
+Plug 'vim-pandoc/vim-pandoc'
+Plug 'vim-pandoc/vim-pandoc-syntax'
 
 function! BuildComposer(info)
   if a:info.status != 'unchanged' || a:info.force
