@@ -9,8 +9,8 @@ ZDOTDIR=/path/to/where/you/want/.zshrc
 2. Enjoy
 
 
-## Keymap
-```Bash
+### Keymap
+```
 ~/.xinitrc
 [[ -f ~/path/to/key_map ]] && xmodmap ~/path/to/key_map
 ```
@@ -20,5 +20,8 @@ ZDOTDIR=/path/to/where/you/want/.zshrc
 `pacman -S texlive-core`
 
 
-## Shit I might forget to install:
+### Shit I might forget to install:
 * shellcheck(pacman) - Ale Bash linter
+* Download and install [fzf](https://github.com/junegunn/fzf)
+  * Move .fzf.zsh into ~/.config/zsh/ | Change to $ZDOTDIR?
+
