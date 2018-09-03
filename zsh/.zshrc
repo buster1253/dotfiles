@@ -5,6 +5,7 @@
 export ZPLUG_HOME=/home/petter/.config/zplug
 export LANG="en_US.UTF-8"
 export EDITOR='nvim'
+export PATH=/usr/local/openresty/bin:$PATH
 
 # Install zplug if not installed
 [ ! -d ~/.config/zplug ] && git clone https://github.com/zplug/zplug ~/.config/zplug
@@ -19,21 +20,80 @@ zplug 'zplug/zplug', hook-build:'zplug --self-manage'
 zplug "zsh-users/zsh-syntax-highlighting", defer:2
 
 # Load theme
-zplug "bhilburn/powerlevel9k", use:powerlevel9k.zsh-theme
-
+# zplug "bhilburn/powerlevel9k", use:powerlevel9k.zsh-theme
+zplug "denysdovhan/spaceship-prompt", use:spaceship.zsh, from:github, as:theme
 zplug "plugins/git", from:oh-my-zsh
-zplug "plugins/vi-mode", from:oh-my-zsh
 zplug "plugins/colored-man-pages", from:oh-my-zsh
 zplug "plugins/colorize", from:oh-my-zsh
 
 zplug load
 
+# SPACESHIP CONF
+# LEFT PROMPT ORDER
 
-#plugins=(
-#  git
-#  vi-mode
-#)
-#source $ZSH/oh-my-zsh.sh
+SPACESHIP_PROMPT_ORDER=(
+	time			# Time stampts section
+	user			# Username section
+	dir				# Current directory section
+	host			# Hostname section
+	git
+	hg				# Mercurial section (hg_branch	+ hg_status)
+	package			# Package version
+	node			# Node.js section
+	ruby			# Ruby section
+	elixir			# Elixir section
+	xcode			# Xcode section
+	swift			# Swift section
+	golang			# Go section
+	php				# PHP section
+	rust			# Rust section
+	haskell			# Haskell Stack section
+	julia			# Julia section
+	docker			# Docker section
+	aws				# Amazon Web Services section
+	venv			# virtualenv section
+	conda			# conda virtualenv section
+	pyenv			# Pyenv section
+	dotnet			# .NET section
+	ember			# Ember.js section
+	kubecontext		# Kubectl context section
+	exec_time		# Execution time
+	line_sep		# Line break
+#	battery			# Battery level and status
+#	vi_mode			# Vi-mode indicator
+	jobs			# Background jobs indicator
+	exit_code		# Exit code section
+	char			# Prompt character
+)
+
+# RIGHT PROMPT ORDER
+SPACESHIP_RPROMPT_ORDER=(
+)
+
+
+# PROMPT
+SPACESHIP_PROMPT_ADD_NEWLINE=false
+SPACESHIP_PROMPT_FIRST_PREFIX_SHOW=false
+
+# CHAR
+SPACESHIP_CHAR_PREFIX=""
+SPACESHIP_CHAR_SUFFIX=""
+
+# USER
+SPACESHIP_USER_SHOW=true
+SPACESHIP_USER_PREFIX=""
+
+# GIT
+SPACESHIP_GIT_SYMBOL=""
+SPACESHIP_GIT_BRANCH_PREFIX=""
+# WRAP BRANCH & STATUS IN git:(..)
+SPACESHIP_GIT_PREFIX='git:('
+SPACESHIP_GIT_SUFFIX=")"
+SPACESHIP_GIT_BRANCH_SUFFIX=""
+# REMOVE [] AROUND STATUS
+SPACESHIP_GIT_STATUS_PREFIX=""
+SPACESHIP_GIT_STATUS_SUFFIX=""
+
 
 
 # True colors
@@ -86,9 +146,6 @@ CASE_SENSITIVE="true"
 
 # export MANPATH="/usr/local/man:$MANPATH"
 
-# You may need to manually set your language environment
-# export LANG=en_US.UTF-8
-
 # Preferred editor for local and remote sessions
 # if [[ -n $SSH_CONNECTION ]]; then
 #   export EDITOR='vim'
@@ -97,7 +154,7 @@ CASE_SENSITIVE="true"
 # fi
 
 # Compilation flags
-# export ARCHFLAGS="-arch x86_64"
+export ARCHFLAGS="-arch x86_64"
 
 # ssh
 # export SSH_KEY_PATH="~/.ssh/rsa_id"
@@ -113,24 +170,6 @@ if [[ $TERM == xterm-termite ]]; then
 	. /etc/profile.d/vte.sh
 	__vte_osc7
 fi
-
-# ICONS
-POWERLEVEL9K_LINUX_ICON=
-POWERLEVEL9K_HOME_ICON='\Uf015'
-POWERLEVEL9K_HOME_SUB_ICON='\Uf07C'
-POWERLEVEL9K_FOLDER_ICON='\Uf07b'
-POWERLEVEL9K_SHORTEN_DIR_LENGTH=2
-
-POWERLEVEL9K_VCS_UNSTAGED_ICON='\Uf06a'
-POWERLEVEL9K_VCS_UNTRACKED_ICON='\Uf059'
-# Prompt settings
-# Font
-POWERLEVEL9K_MODE="nerdfont-complete"
-# doublelined propt
-POWERLEVEL9K_PROMPT_ON_NEWLINE=false
-
-POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(context dir status vcs)
-POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=(vi_mode history)
 
 alias vi='nvim'
 alias vim='nvim'
