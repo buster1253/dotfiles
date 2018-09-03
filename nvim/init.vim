@@ -12,7 +12,7 @@ autocmd BufWritePost * silent
 			\!sh /home/petter/.config/nvim/scripts/restart_openresty.sh '%:p'
 nnoremap <C-*> 
 			\!sh /home/petter/.config/nvim/scripts/restart_openresty.sh '%:p'
-set colorcolumn=80
+set colorcolumn=81
 highlight ColorColumn ctermbg=1
 
 " vimwiki settings
