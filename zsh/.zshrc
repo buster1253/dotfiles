@@ -20,11 +20,11 @@ zplug 'zplug/zplug', hook-build:'zplug --self-manage'
 zplug "zsh-users/zsh-syntax-highlighting", defer:2
 
 # Load theme
-# zplug "bhilburn/powerlevel9k", use:powerlevel9k.zsh-theme
-zplug "denysdovhan/spaceship-prompt", use:spaceship.zsh, from:github, as:theme
 zplug "plugins/git", from:oh-my-zsh
 zplug "plugins/colored-man-pages", from:oh-my-zsh
 zplug "plugins/colorize", from:oh-my-zsh
+
+zplug "denysdovhan/spaceship-prompt", use:spaceship.zsh, from:github, as:theme
 
 zplug load
 
@@ -97,7 +97,7 @@ SPACESHIP_GIT_STATUS_SUFFIX=""
 
 
 # True colors
-export TERM='xterm-termite'
+#export TERM='xterm-termite'
 
 HISTFILE=$HOME/.config/zsh/.zsh_history
 HISTSIZE=1000
@@ -107,7 +107,7 @@ SAVEHIST=1000
 zstyle ':completion:*' menu select
 
 # Command not found hook
-source /usr/share/doc/pkgfile/command-not-found.zsh
+source /etc/zsh_command_not_found
 
 # Uncomment the following line to use case-sensitive completion.
 CASE_SENSITIVE="true"
@@ -167,7 +167,7 @@ export ARCHFLAGS="-arch x86_64"
 
 # Termite new terminal in current directory
 if [[ $TERM == xterm-termite ]]; then
-	. /etc/profile.d/vte.sh
+	. /etc/profile.d/vte-2.91.sh
 	__vte_osc7
 fi
 

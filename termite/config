@@ -1,7 +1,7 @@
 [options]
 #font = Source Code Variable Medium 12
-font = RobotoMono Nerd Font, Italic 12
-font = RobotoMono Nerd Font, Regular 12
+font = RobotoMono Nerd Font, Italic 14
+font = RobotoMono Nerd Font, Regular 14
 
 [colors]
 foreground = #D8DEE9
