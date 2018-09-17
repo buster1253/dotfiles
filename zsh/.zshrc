@@ -5,7 +5,7 @@
 export ZPLUG_HOME=/home/petter/.config/zplug
 export LANG="en_US.UTF-8"
 export EDITOR='nvim'
-export PATH=/usr/local/openresty/bin:$PATH
+export PATH=/usr/local/openresty/bin:/home/petter/.cargo/bin:$PATH
 
 # Install zplug if not installed
 [ ! -d ~/.config/zplug ] && git clone https://github.com/zplug/zplug ~/.config/zplug
@@ -60,7 +60,7 @@ SPACESHIP_PROMPT_ORDER=(
 	exec_time		# Execution time
 	line_sep		# Line break
 #	battery			# Battery level and status
-#	vi_mode			# Vi-mode indicator
+	vi_mode			# Vi-mode indicator
 	jobs			# Background jobs indicator
 	exit_code		# Exit code section
 	char			# Prompt character
@@ -94,7 +94,13 @@ SPACESHIP_GIT_BRANCH_SUFFIX=""
 SPACESHIP_GIT_STATUS_PREFIX=""
 SPACESHIP_GIT_STATUS_SUFFIX=""
 
+SPACESHIP_PHP_SHOW=true
+SPACESHIP_PHP_PREFIX=' php:('
+SPACESHIP_PHP_SYMBOL=''
+SPACESHIP_PHP_SUFFIX=')'
 
+#SPACESHIP_VI_MODE_INSERT="I"
+#SPACESHIP_VI_MODE_NORMAL="N"
 
 # True colors
 #export TERM='xterm-termite'
@@ -152,7 +158,7 @@ CASE_SENSITIVE="true"
 # else
 #   export EDITOR='mvim'
 # fi
-
+export EDITOR='nvim'
 # Compilation flags
 export ARCHFLAGS="-arch x86_64"
 
