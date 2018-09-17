@@ -8,6 +8,7 @@
 !i3/config.desktop
 !i3/config.default
 !i3/config.laptop
+!i3/config
 !nvim/init.vim
 !termite/config
 !i3status_rust/config.toml.desktop
