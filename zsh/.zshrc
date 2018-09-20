@@ -4,8 +4,9 @@
 # Path to oh-my-zsh installation.
 export ZPLUG_HOME=/home/petter/.config/zplug
 export LANG="en_US.UTF-8"
-export EDITOR='nvim'
+export EDITOR='vim'
 export PATH=/usr/local/openresty/bin:/home/petter/.cargo/bin:$PATH
+export MYVIMRC='$HOME/.config/vimrc'
 
 # Install zplug if not installed
 [ ! -d ~/.config/zplug ] && git clone https://github.com/zplug/zplug ~/.config/zplug
@@ -158,7 +159,7 @@ CASE_SENSITIVE="true"
 # else
 #   export EDITOR='mvim'
 # fi
-export EDITOR='nvim'
+export EDITOR='vim'
 # Compilation flags
 export ARCHFLAGS="-arch x86_64"
 
@@ -177,8 +178,8 @@ if [[ $TERM == xterm-termite ]]; then
 	__vte_osc7
 fi
 
-alias vi='nvim'
-alias vim='nvim'
+alias vi='vim -u ~/.config/vimrc'
+alias vim='vim -u ~/.config/vimrc'
 alias ls='ls --color=auto'
 alias pac='sudo pacman'
 # Vi mode
