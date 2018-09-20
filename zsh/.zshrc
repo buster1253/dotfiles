@@ -2,11 +2,11 @@
 # export PATH=$HOME/bin:/usr/local/bin:$PATH
 
 # Path to oh-my-zsh installation.
-export ZPLUG_HOME=/home/petter/.config/zplug
+export ZPLUG_HOME=$HOME/.config/zplug
 export LANG="en_US.UTF-8"
 export EDITOR='vim'
-export PATH=/usr/local/openresty/bin:/home/petter/.cargo/bin:$PATH
-export MYVIMRC='$HOME/.config/vimrc'
+export PATH=/usr/local/openresty/bin:$HOME/.cargo/bin:$PATH
+export MYVIMRC=$HOME/.config/vimrc
 
 # Install zplug if not installed
 [ ! -d ~/.config/zplug ] && git clone https://github.com/zplug/zplug ~/.config/zplug
