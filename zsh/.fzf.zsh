@@ -13,7 +13,7 @@ fi
 [[ $- == *i* ]] && source "/home/petter/.fzf/shell/completion.zsh" 2> /dev/null
 
 gv() {
-	grep $@|sed -n 's/\([^.]\+\).\([a-Z]*\).orig\?:\([0-9]\+\)/\1\t\2\t\3\t/p'|fzf --preview 'cat {1}.{2} | highlight -S {2} -O "xterm256" | tail +{3}' --height 100% --bind "enter:execute(vim -u ~/.config/vimrc {1}.{2} +{3} < /dev/tty)"
+	grep $@|sed -n 's/\([^.]\+\).\([a-Z]*\)[.orig]\?:\([0-9]\+\)/\1\t\2\t\3\t/p'|fzf --preview 'tail -n +{3} {1}.{2} | highlight --force -S {2} -O ansi ' --height 100% --bind "enter:execute(vim -u ~/.config/vimrc {1}.{2} +{3} < /dev/tty)"
 }
 # Key bindings
 # ------------
