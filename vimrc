@@ -1,17 +1,20 @@
 """""""""""""""""""
 " NeoVim Settings "
 """""""""""""""""""
-autocmd BufWritePost * silent !sh /home/petter/.config/nvim/scripts/restart_openresty.sh '%:p'
+autocmd BufWritePost * silent !sh $HOME/.config/nvim/scripts/restart_openresty.sh '%:p'
+autocmd BufWritePost * :redraw!
+
 nnoremap <C-*> !sh /home/petter/.config/nvim/scripts/restart_openresty.sh '%:p'
+
 set colorcolumn=81
-"highlight ColorColumn ctermbg=1
 set hlsearch " hightlight search text
+set incsearch
 
 " Vimwiki
 set nocompatible
 filetype plugin on
 syntax on
-let g:vimwiki_list = [{'path':'~/vimwiki/',
+let g:vimwiki_list = [{'path':'~/.config/vimwiki/',
 	\ 'syntax': 'markdown', 'ext':'.md'}]
 
 " Always show status bar    
@@ -28,7 +31,7 @@ let g:ale_linters = {
 \	'javascript': ['eslint'],
 \	'typescript': ['tslint'],
 \	'sh': ['shellcheck'],
-\	'C': ['gcc']
+\	'C': ['gcc'],
 \}
 " Set language specific fixers
 let g:ale_fixers = {
@@ -51,7 +54,8 @@ set directory=$HOME/.vim/swap//
 
 " NERDTree
 " Autoclose vim if NERDTree is only open window
-autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
+autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") 
+			\&& b:NERDTree.isTabTree()) | q | endif
 " /NERDTree
 
 let mapleader = ","
@@ -60,10 +64,11 @@ set nu
 """"""""""""
 " markdown "
 """"""""""""
-let vim_markdown_preview_hotkey='<C-z>'
-let vim_markdown_preview_browser='Firefox Developer Edition'
-let g:markdown_composer_browser='firefox-developer-edition'
-let g:markdown_composer_custom_css=['file:///home/petter/.local/share/plugged/github-css/github-markdown.css']
+"let vim_markdown_preview_hotkey='<C-z>'
+"let vim_markdown_preview_browser='Firefox Developer Edition'
+"let g:markdown_composer_browser='firefox-developer-edition'
+"let g:markdown_composer_custom_css=
+	"\['file:///home/petter/.local/share/plugged/github-css/github-markdown.css']
 """""""""""""
 " /markdown "
 """""""""""""
@@ -86,7 +91,8 @@ Plug 'scrooloose/nerdtree', { 'on':  'NERDTreeToggle' }
 Plug 'scrooloose/nerdcommenter'
 Plug 'Xuyuanp/nerdtree-git-plugin'
 
-"Plug 'junegunn/fzf.vim'
+Plug '~/.fzf'
+Plug 'junegunn/fzf.vim'
 " Vim-airline for powerline
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
@@ -109,8 +115,19 @@ Plug 'jiangmiao/auto-pairs'
 Plug 'vimwiki/vimwiki'
 Plug 'vim-pandoc/vim-pandoc'
 Plug 'vim-pandoc/vim-pandoc-syntax'
+Plug 'dhruvasagar/vim-table-mode'
 
+
+Plug 'hari-rangarajan/CCTree'
+
+" PlantUML UML/sequence scheme language
+Plug 'scrooloose/vim-slumlord'
+Plug 'aklt/plantuml-syntax'
+
+"Plug 'xolox/vim-lua-ftplugin' " lua completion
+"Plug 'xolox/vim-misc'
 Plug 'chr4/nginx.vim' " nginx.conf 
+Plug 'Valloric/YouCompleteMe'
 
 Plug 'rhysd/vim-clang-format'
 Plug 'tpope/vim-surround' " ds, cs, yss"
@@ -120,6 +137,8 @@ Plug 'morhetz/gruvbox'
 "Plug 'icymind/NeoSolarized'
 "Plug 'mhartington/oceanic-next'
 
+" ord mode
+Plug 'easymotion/vim-easymotion'
 " Initialize plugin system
 call plug#end()
 
@@ -147,10 +166,13 @@ set noexpandtab
 colorscheme gruvbox
 set background=dark
 set termguicolors
-
-let g:gruvbox_number_column='#FFFFFF'
-let g:gruvbox_color_column='bg2'
 let g:gruvbox_italic=1
+
+" FZF
+let g:fzf_action = {
+			\ 'ctrl-t': 'tab split',
+			\ 'ctrl-x': 'split',
+			\ 'ctrl-v': 'vsplit'}
 
 " Reopen file at same line when it was closed
 if has("autocmd")
@@ -161,7 +183,9 @@ endif
 " Cursor line and column hightlight
 hi CursorLine	cterm=NONE	ctermbg=darkred	ctermfg=white guibg=#3C3836
 hi CursorColumn cterm=NONE ctermbg=darkblue ctermfg=white guibg=#3C3836 
+highlight ColorColumn guibg=orange
 nnoremap <Leader>m :set cursorline! cursorcolumn!<CR>
+set cursorline cursorcolumn
 
 " Search for word under cursor using //
 vnoremap // y/<C-R>"<CR>
