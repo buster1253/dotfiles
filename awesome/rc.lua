@@ -195,39 +195,16 @@ end
 -- Re-set wallpaper when a screen's geometry changes (e.g. different resolution)
 screen.connect_signal("property::geometry", set_wallpaper)
 
-local tag_list = {
-	{
-		screen = 1,
-		active = true,
-		screen_idx = 1
-	},
-	{
-		screen = 2,
-		active = true,
-		screen_idx = 1
-	},
-	{
-		screen = 3,
-		active = true,
-		screen_idx = 1
-	},
-	{
-		screen = 4,
-		active = false,
-		screen_idx = 2
-	},
-	{
-		screen = 5,
-		active = false,
-		screen_idx = 2
-	},
-}
+local tag_list = {}
 
 awful.screen.connect_for_each_screen(function(s)
     -- Wallpaper
     set_wallpaper(s)
 
 	awful.tag({s.index}, s, awful.layout.layouts[1])
+
+	-- add tag to the tag list
+	tag_list[s.index] = s.tags[1]
     -- Each screen has its own tag table.
     --awful.tag({ "gen", "dev", "web", "4", "5", "6", "7", "8", "9" }, 
 			--s, awful.layout.layouts[1])
@@ -520,6 +497,14 @@ clientkeys = gears.table.join(
         {description = "(un)maximize horizontally", group = "client"})
 )
 
+local function table_length(t) 
+	local c = 0
+	for _ in pairs(t) do
+		if _ then c = c +1 end
+	end
+	return c
+end
+--
 -- Bind all key numbers to tags.
 -- Be careful: we use keycodes to make it work on any keyboard layout.
 -- This should map on the top row of your keyboard, usually 1 to 9.
@@ -528,24 +513,23 @@ for i = 1, 9 do
         -- View tag only.
 		awful.key({ modkey }, "#" .. i + 9,
 			function ()
+				-- get the globally uniqe tag:
 				local tag = tag_list[i]
-				--awful.screen.focus(i)
-				if tag.active then
-					-- focus the screen and tag
-					awful.screen.focus(tag.screen)
-					screen[tag.screen].tags[tag.screen_idx]:view_only()
-				else 
+				if tag and tag.activated then -- move to tag & screen
+					local curr_screen = awful.screen.focused()
+					local curr_tag = curr_screen.selected_tag
+					local new_screen = awful.tag.getscreen(tag)
+					awful.screen.focus(new_screen)
+					tag:view_only()
+					-- don't remove the tag if it's the only one remove
+					if #curr_screen.tags > 1 and table_length(curr_tag:clients()) < 1 then
+						curr_tag:delete()
+					end
+				else  -- add tag to current screen
 					local s = awful.screen.focused()
-					awful.tag.add(i,{screen=s}):view_only()
-					tag.screen = s.index
-					tag.active = true
-					tag.screen_idx = #s.tags
-
-					--local screen = awful.screen.focused()
-					--local tag = screen.tags[i]
-					--if tag then
-					--tag:view_only()
-					--end
+					local t = awful.tag.add(i,{screen=s})
+					tag_list[i] = t
+					t:view_only()
 				end
 			end,
 			{description = "view tag #"..i, group = "tag"}),
@@ -565,20 +549,23 @@ for i = 1, 9 do
 				if client.focus then
 					local tag = tag_list[i]
 					local c = client.focus
-					if tag.active then
-						local t = screen[tag.screen].tags[tag.screen_idx]
-						c:move_to_screen(tag.screen)
-						c:move_to_tag(t)
-						awful.screen.focus(tag.screen)
-						t:view_only()
-					else
+					local curr_screen = awful.screen.focused()
+					local curr_tag = curr_screen.selected_tag
+					if tag and tag.activated then -- move client to tag
+						c:move_to_screen(awful.tag.getscreen(tag))
+						c:move_to_tag(tag)
+						awful.screen.focus(awful.tag.getscreen(tag))
+						tag:view_only()
+					else -- create tag and move client
 						local s = awful.screen.focused()
 						local t = awful.tag.add(i,{screen=s})
+						tag_list[i] = t
 						c:move_to_tag(t)
 						t:view_only()
-						tag.screen = s.index
-						tag.active = true
-						tag.screen_idx = #s.tags
+					end
+					-- remove tag if no clients
+					if table_length(curr_tag:clients()) < 1 then
+						curr_tag:delete()
 					end
 					-- whats screen is the tag on?
 					--local tag = client.focus.screen.tags[i]
@@ -757,5 +744,5 @@ client.connect_signal("unfocus",
 	function(c) c.border_color = beautiful.border_normal 
 end)
 -- }}}
-naughty.suspend()
+--naughty.suspend()
 --awful.titlebar.hide()
