@@ -221,10 +221,13 @@ awful.screen.connect_for_each_screen(function(s)
 		awful.button({ }, 5, function () awful.layout.inc(-1) end)
 	))
     -- Create a taglist widget
-    s.mytaglist = awful.widget.taglist(s, awful.widget.taglist.filter.all, taglist_buttons)
-
+    --s.mytaglist = awful.widget.taglist(s, 
+			--awful.widget.taglist.filter.all, 
+			--taglist_buttons,
+    s.mytaglist = awful.widget.taglist(s, awful.widget.taglist.filter.all,
+				taglist_buttons)
     -- Create a tasklist widget
-    --s.mytasklist = awful.widget.tasklist(s, awful.widget.tasklist.filter.currenttags, tasklist_buttons)
+	--s.mytasklist = awful.widget.tasklist(s, awful.widget.tasklist.filter.currenttags, tasklist_buttons)
 
 
     -- Create the wibox
@@ -525,9 +528,16 @@ for i = 1, 9 do
 					if #curr_screen.tags > 1 and table_length(curr_tag:clients()) < 1 then
 						curr_tag:delete()
 					end
-				else  -- add tag to current screen
+				else  -- create the tag and move to current screen
 					local s = awful.screen.focused()
-					local t = awful.tag.add(i,{screen=s})
+					local t = awful.tag.add(i,{screen=s, layout=awful.layout.layouts[1]})
+					awful.tag.setlayout(awful.layout.layouts[1], t)
+					-- force tags to be sorted only works for numeric names
+					for ti,tag in ipairs(s.tags) do
+						if tonumber(tag.name) > i then
+							awful.tag.move(ti, t)
+						end
+					end
 					tag_list[i] = t
 					t:view_only()
 				end
@@ -574,7 +584,7 @@ for i = 1, 9 do
 					--end
 				end
 			end,
-                  {description = "move focused client to tag #"..i, group = "tag"}),
+			{description = "move focused client to tag #"..i, group = "tag"}),
         -- Toggle tag on focused client.
         awful.key({ modkey, "Control", "Shift" }, "#" .. i + 9,
                   function ()
