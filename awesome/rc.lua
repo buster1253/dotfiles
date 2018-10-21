@@ -121,20 +121,28 @@ myawesomemenu = {
 local menu_awesome = { "awesome", myawesomemenu, beautiful.awesome_icon }
 local menu_terminal = { "open terminal", terminal }
 
-if has_fdo then
-    mymainmenu = freedesktop.menu.build({
-        before = { menu_awesome },
-        after =  { menu_terminal }
-    })
-else
-	mymainmenu = awful.menu({
-		items = {
-			menu_awesome,
-			{ "Debian", debian.menu.Debian_menu.Debian },
-			menu_terminal,
-		}
-	})
-end
+mymainmenu = awful.menu({
+	items = {
+		menu_awesome,
+		menu_terminal
+	}
+})
+
+
+--if has_fdo then
+    --mymainmenu = freedesktop.menu.build({
+        --before = { menu_awesome },
+        --after =  { menu_terminal }
+    --})
+--else
+	--mymainmenu = awful.menu({
+		--items = {
+			--menu_awesome,
+			----{ "Debian", debian.menu.Debian_menu.Debian },
+			--menu_terminal,
+		--}
+	--})
+--end
 
 
 mylauncher = awful.widget.launcher({ image = beautiful.awesome_icon,
@@ -209,6 +217,30 @@ local function set_wallpaper(s)
     end
 end
 
+-- test fake screen
+
+local function new_screen()
+	local fake = screen.fake_add(-1920,0,1920,1080)
+end
+
+local curr_screen = 2
+local function move_screen() 
+	local count = screen:count()
+	for i=1, count do
+		if i == curr_screen then
+			screen[i]:fake_resize(0,0,1920,1080)
+		else
+			screen[i]:fake_resize(-1920,0,1920,1080)
+		end
+	end
+	curr_screen = curr_screen + 1
+	if curr_screen > count then
+		curr_screen = 1
+	end
+end
+
+
+
 -- Re-set wallpaper when a screen's geometry changes (e.g. different resolution)
 screen.connect_signal("property::geometry", set_wallpaper)
 
@@ -217,9 +249,11 @@ awful.screen.connect_for_each_screen(function(s)
     set_wallpaper(s)
 
     -- Each screen has its own tag table.
-    awful.tag({ "gen", "dev", "web", "4", "5", "6", "7", "8", "9" }, 
+	awful.tag({ "gen", "dev", "web", "4", "5", "6", "7", "8", "9" }, 
 			s, awful.layout.layouts[1])
 
+    --awful.tag({s.index}, 
+			--s, awful.layout.layouts[1])
     -- Create a promptbox for each screen
     s.mypromptbox = awful.widget.prompt()
     -- Create an imagebox widget which will contain an icon indicating which layout we're using.
@@ -303,7 +337,10 @@ local spotify = {
 
 -- {{{ Key bindings
 globalkeys = gears.table.join(
-
+	awful.key({ modkey }, "a", new_screen,
+			{description = "add screen", group = "Bjørnar"}),
+	awful.key({ modkey }, "i", move_screen,
+			{description = "next screen", group = "Bjørnar"}),
 	awful.key({ modkey }, "p", spotify.toggle,
 			{description = "PlayPause toggle", group = "Spotify"}),
 	awful.key({ modkey, "Shift" }, "n", spotify.next,
@@ -516,11 +553,28 @@ for i = 1, 9 do
         -- View tag only.
         awful.key({ modkey }, "#" .. i + 9,
                   function ()
-                        local screen = awful.screen.focused()
-                        local tag = screen.tags[i]
-                        if tag then
-                           tag:view_only()
-                        end
+						--local tags = root.tags()
+						--for tag in ipairs(tags) do
+							--if tag.index == i then
+								--tag:view_only()
+								--return
+							--end
+						--end
+						--for s in ipairs(screen) do
+							--local t = s.tags()[i]
+							--if t then
+								--awful.screen.focus(s)
+								--return
+							--end
+						--end
+						--awful.tag.add(i, {
+							--screen = awful.screen.focused()
+						--}):view_only()
+						local screen = awful.screen.focused()
+						local tag = screen.tags[i]
+						if tag then
+						   tag:view_only()
+						end
                   end,
                   {description = "view tag #"..i, group = "tag"}),
         -- Toggle tag display.
