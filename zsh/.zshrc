@@ -1,6 +1,12 @@
 # If you come from bash you might have to change your $PATH.
 # export PATH=$HOME/bin:/usr/local/bin:$PATH
 
+if [ -f /etc/os-release ]; then
+	. /etc/os-release
+	OS=$NAME
+fi
+
+
 # Path to oh-my-zsh installation.
 export ZPLUG_HOME=$HOME/.config/zplug
 export LANG="en_US.UTF-8"
@@ -115,8 +121,11 @@ SAVEHIST=1000
 # Tab completion menu
 zstyle ':completion:*' menu select
 
-# Command not found hook
-source /etc/zsh_command_not_found
+if [ "$OS" = "Ubuntu" ]; then
+	source /etc/zsh_command_not_found
+elif [ "$OS" = "Arch Linux" ]; then
+	source /usr/share/doc/pkgfile/command-not-found.zsh
+fi
 
 # Uncomment the following line to use case-sensitive completion.
 CASE_SENSITIVE="true"

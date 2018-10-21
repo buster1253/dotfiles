@@ -109,41 +109,16 @@ end
 
 -- {{{ Menu
 -- Create a launcher widget and a main menu
-myawesomemenu = {
-   { "hotkeys", function() return false, hotkeys_popup.show_help end},
-   { "manual", terminal .. " -e man awesome" },
-   { "edit config", editor_cmd .. " " .. awesome.conffile },
-   { "restart", awesome.restart },
-   { "suspend", "systemctl suspend" },
-   { "quit", function() awesome.quit() end}
+local sys_menu = {
+	{ "lock", "light-locker-command -l"},
+	{ "restart", awesome.restart },
+	{ "suspend", "systemctl suspend" },
+	{ "quit", function() awesome.quit() end}
 }
 
-local menu_awesome = { "awesome", myawesomemenu, beautiful.awesome_icon }
-local menu_terminal = { "open terminal", terminal }
-
 mymainmenu = awful.menu({
-	items = {
-		menu_awesome,
-		menu_terminal
-	}
+	items = sys_menu
 })
-
-
---if has_fdo then
-    --mymainmenu = freedesktop.menu.build({
-        --before = { menu_awesome },
-        --after =  { menu_terminal }
-    --})
---else
-	--mymainmenu = awful.menu({
-		--items = {
-			--menu_awesome,
-			----{ "Debian", debian.menu.Debian_menu.Debian },
-			--menu_terminal,
-		--}
-	--})
---end
-
 
 mylauncher = awful.widget.launcher({ image = beautiful.awesome_icon,
                                      menu = mymainmenu })
@@ -244,13 +219,19 @@ end
 -- Re-set wallpaper when a screen's geometry changes (e.g. different resolution)
 screen.connect_signal("property::geometry", set_wallpaper)
 
+local tag_list = {}
+
 awful.screen.connect_for_each_screen(function(s)
     -- Wallpaper
     set_wallpaper(s)
 
+	awful.tag({s.index}, s, awful.layout.layouts[1])
+
+	-- add tag to the tag list
+	tag_list[s.index] = s.tags[1]
     -- Each screen has its own tag table.
-	awful.tag({ "gen", "dev", "web", "4", "5", "6", "7", "8", "9" }, 
-			s, awful.layout.layouts[1])
+    --awful.tag({ "gen", "dev", "web", "4", "5", "6", "7", "8", "9" }, 
+			--s, awful.layout.layouts[1])
 
     --awful.tag({s.index}, 
 			--s, awful.layout.layouts[1])
@@ -266,10 +247,14 @@ awful.screen.connect_for_each_screen(function(s)
 		awful.button({ }, 5, function () awful.layout.inc(-1) end)
 	))
     -- Create a taglist widget
-    s.mytaglist = awful.widget.taglist(s, awful.widget.taglist.filter.all, taglist_buttons)
-
+    --s.mytaglist = awful.widget.taglist(s, 
+			--awful.widget.taglist.filter.all, 
+			--taglist_buttons,
+    s.mytaglist = awful.widget.taglist(s, awful.widget.taglist.filter.all,
+				taglist_buttons)
     -- Create a tasklist widget
-    --s.mytasklist = awful.widget.tasklist(s, awful.widget.tasklist.filter.currenttags, tasklist_buttons)
+	--s.mytasklist = awful.widget.tasklist(s, awful.widget.tasklist.filter.currenttags, tasklist_buttons)
+
 
     -- Create the wibox
     s.mywibox = awful.wibar({ position = "top", screen = s })
@@ -374,10 +359,9 @@ globalkeys = gears.table.join(
         end,
         {description = "focus previous by index", group = "client"}
     ),
-
-    awful.key({ modkey }, "w", 
+	awful.key({ modkey }, "w", 
 				function () mymainmenu:show() end,
-              {description = "show main menu", group = "awesome"}),
+			  {description = "show main menu", group = "awesome"}),
 
     -- Layout manipulation
     awful.key({ modkey, "Shift" }, "j", 
@@ -545,59 +529,91 @@ clientkeys = gears.table.join(
         {description = "(un)maximize horizontally", group = "client"})
 )
 
+local function table_length(t) 
+	local c = 0
+	for _ in pairs(t) do
+		if _ then c = c +1 end
+	end
+	return c
+end
+--
 -- Bind all key numbers to tags.
 -- Be careful: we use keycodes to make it work on any keyboard layout.
 -- This should map on the top row of your keyboard, usually 1 to 9.
 for i = 1, 9 do
-    globalkeys = gears.table.join(globalkeys,
+	globalkeys = gears.table.join(globalkeys,
         -- View tag only.
-        awful.key({ modkey }, "#" .. i + 9,
-                  function ()
-						--local tags = root.tags()
-						--for tag in ipairs(tags) do
-							--if tag.index == i then
-								--tag:view_only()
-								--return
-							--end
-						--end
-						--for s in ipairs(screen) do
-							--local t = s.tags()[i]
-							--if t then
-								--awful.screen.focus(s)
-								--return
-							--end
-						--end
-						--awful.tag.add(i, {
-							--screen = awful.screen.focused()
-						--}):view_only()
-						local screen = awful.screen.focused()
-						local tag = screen.tags[i]
-						if tag then
-						   tag:view_only()
+		awful.key({ modkey }, "#" .. i + 9,
+			function ()
+				-- get the globally uniqe tag:
+				local tag = tag_list[i]
+				if tag and tag.activated then -- move to tag & screen
+					local curr_screen = awful.screen.focused()
+					local curr_tag = curr_screen.selected_tag
+					local new_screen = awful.tag.getscreen(tag)
+					awful.screen.focus(new_screen)
+					tag:view_only()
+					-- don't remove the tag if it's the only one remove
+					if #curr_screen.tags > 1 and table_length(curr_tag:clients()) < 1 then
+						curr_tag:delete()
+					end
+				else  -- create the tag and move to current screen
+					local s = awful.screen.focused()
+					local t = awful.tag.add(i,{screen=s, layout=awful.layout.layouts[1]})
+					awful.tag.setlayout(awful.layout.layouts[1], t)
+					-- force tags to be sorted only works for numeric names
+					for ti,tag in ipairs(s.tags) do
+						if tonumber(tag.name) > i then
+							awful.tag.move(ti, t)
 						end
-                  end,
-                  {description = "view tag #"..i, group = "tag"}),
+					end
+					tag_list[i] = t
+					t:view_only()
+				end
+			end,
+			{description = "view tag #"..i, group = "tag"}),
         -- Toggle tag display.
         awful.key({ modkey, "Control" }, "#" .. i + 9,
-                  function ()
-                      local screen = awful.screen.focused()
-                      local tag = screen.tags[i]
-                      if tag then
-                         awful.tag.viewtoggle(tag)
-                      end
-                  end,
-                  {description = "toggle tag #" .. i, group = "tag"}),
+			function ()
+				local screen = awful.screen.focused()
+				local tag = screen.tags[i]
+				if tag then
+					awful.tag.viewtoggle(tag)
+				end
+			end,
+			{description = "toggle tag #" .. i, group = "tag"}),
         -- Move client to tag.
         awful.key({ modkey, "Shift" }, "#" .. i + 9,
-                  function ()
-                      if client.focus then
-                          local tag = client.focus.screen.tags[i]
-                          if tag then
-                              client.focus:move_to_tag(tag)
-                          end
-                     end
-                  end,
-                  {description = "move focused client to tag #"..i, group = "tag"}),
+			function ()
+				if client.focus then
+					local tag = tag_list[i]
+					local c = client.focus
+					local curr_screen = awful.screen.focused()
+					local curr_tag = curr_screen.selected_tag
+					if tag and tag.activated then -- move client to tag
+						c:move_to_screen(awful.tag.getscreen(tag))
+						c:move_to_tag(tag)
+						awful.screen.focus(awful.tag.getscreen(tag))
+						tag:view_only()
+					else -- create tag and move client
+						local s = awful.screen.focused()
+						local t = awful.tag.add(i,{screen=s})
+						tag_list[i] = t
+						c:move_to_tag(t)
+						t:view_only()
+					end
+					-- remove tag if no clients
+					if table_length(curr_tag:clients()) < 1 then
+						curr_tag:delete()
+					end
+					-- whats screen is the tag on?
+					--local tag = client.focus.screen.tags[i]
+					--if tag then
+						--client.focus:move_to_tag(tag)
+					--end
+				end
+			end,
+			{description = "move focused client to tag #"..i, group = "tag"}),
         -- Toggle tag on focused client.
         awful.key({ modkey, "Control", "Shift" }, "#" .. i + 9,
                   function ()
@@ -767,5 +783,5 @@ client.connect_signal("unfocus",
 	function(c) c.border_color = beautiful.border_normal 
 end)
 -- }}}
-naughty.suspend()
+--naughty.suspend()
 --awful.titlebar.hide()
