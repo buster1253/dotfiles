@@ -6,6 +6,8 @@ autocmd BufWritePost * :redraw!
 
 nnoremap <C-*> !sh /home/petter/.config/nvim/scripts/restart_openresty.sh '%:p'
 
+set clipboard=unnamed " yank cross terminals
+
 set colorcolumn=81
 set hlsearch " hightlight search text
 set incsearch
@@ -146,16 +148,18 @@ call plug#end()
 set backspace=indent,eol,start
 
 " configure tabs and spaces
-set noexpandtab " insert tabs 
+set expandtab " insert tabs 
 set smarttab
-set tabstop=4
-set softtabstop=4
-set shiftwidth=4
+set tabstop=2
+set softtabstop=2
+set shiftwidth=2
 set shiftround
 set completeopt+=longest
 set autoindent
-set noexpandtab
 
+
+set showcmd " show command in bottom bar
+set showmatch " hightlight matching [{()}]"
 " Disable arrow keys
 "noremap <Up>	<Nop>
 "noremap <Left>	<Nop>
@@ -187,9 +191,10 @@ highlight ColorColumn guibg=orange
 nnoremap <Leader>m :set cursorline! cursorcolumn!<CR>
 set cursorline cursorcolumn
 
-" Search for word under cursor using //
-vnoremap // y/<C-R>"<CR>
-
 " Show command completion suggestions
 set wildmode=longest,list,full
 set wildmenu
+
+" center result of N/n 
+map N Nzz
+map n nzz
