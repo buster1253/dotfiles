@@ -1,6 +1,8 @@
 """""""""""""""""""
-" NeoVim Settings "
+"   Vim Settings  "
 """""""""""""""""""
+
+" Run auto reload script on save, used for openresty
 autocmd BufWritePost * silent !sh $HOME/.config/nvim/scripts/restart_openresty.sh '%:p'
 autocmd BufWritePost * :redraw!
 
