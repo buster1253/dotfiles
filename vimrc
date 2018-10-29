@@ -101,7 +101,7 @@ Plug 'vim-airline/vim-airline-themes'
 
 " Linter
 Plug 'w0rp/ale'
-Plug 'palantir/tslint'
+"Plug 'palantir/tslint'
 " Autocomplete / complete framework
 
 " Typescript
@@ -112,7 +112,7 @@ Plug 'airblade/vim-gitgutter'
 Plug 'tpope/vim-fugitive'
 
 " AutoPair
-Plug 'jiangmiao/auto-pairs'
+"Plug 'jiangmiao/auto-pairs'
 
 Plug 'vimwiki/vimwiki'
 Plug 'vim-pandoc/vim-pandoc'
@@ -120,7 +120,7 @@ Plug 'vim-pandoc/vim-pandoc-syntax'
 Plug 'dhruvasagar/vim-table-mode'
 
 
-Plug 'hari-rangarajan/CCTree'
+"Plug 'hari-rangarajan/CCTree'
 
 " PlantUML UML/sequence scheme language
 Plug 'scrooloose/vim-slumlord'
@@ -129,7 +129,7 @@ Plug 'aklt/plantuml-syntax'
 "Plug 'xolox/vim-lua-ftplugin' " lua completion
 "Plug 'xolox/vim-misc'
 Plug 'chr4/nginx.vim' " nginx.conf 
-Plug 'Valloric/YouCompleteMe'
+"Plug 'Valloric/YouCompleteMe'
 
 Plug 'rhysd/vim-clang-format'
 Plug 'tpope/vim-surround' " ds, cs, yss"

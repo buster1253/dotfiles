@@ -32,7 +32,6 @@ zplug "plugins/colored-man-pages", from:oh-my-zsh
 zplug "plugins/colorize", from:oh-my-zsh
 
 zplug "denysdovhan/spaceship-prompt", use:spaceship.zsh, from:github, as:theme
-
 zplug load
 
 # SPACESHIP CONF
