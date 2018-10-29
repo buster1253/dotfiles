@@ -1,17 +1,19 @@
 """""""""""""""""""
-" NeoVim Settings "
+"   Vim Settings  "
 """""""""""""""""""
 set nocompatible
 filetype plugin on
 syntax on
 
-" autosave for openresty projects TODO make more dynamic
+" Run auto reload script on save, used for openresty
 autocmd BufWritePost * silent !sh $HOME/.config/nvim/scripts/restart_openresty.sh '%:p'
 autocmd BufWritePost * :redraw!
 
 nnoremap <C-*> !sh /home/petter/.config/nvim/scripts/restart_openresty.sh '%:p'
 
+set clipboard=unnamed " yank cross terminals
 
+set colorcolumn=81
 
 " Always show status bar    
 set laststatus=2
@@ -95,7 +97,7 @@ Plug 'vim-airline/vim-airline-themes'
 
 " Linter
 Plug 'w0rp/ale'
-Plug 'palantir/tslint'
+"Plug 'palantir/tslint'
 " Autocomplete / complete framework
 
 " Typescript
@@ -106,7 +108,7 @@ Plug 'airblade/vim-gitgutter'
 Plug 'tpope/vim-fugitive'
 
 " AutoPair
-Plug 'jiangmiao/auto-pairs'
+"Plug 'jiangmiao/auto-pairs'
 
 Plug 'vimwiki/vimwiki'
 Plug 'vim-pandoc/vim-pandoc'
@@ -114,7 +116,7 @@ Plug 'vim-pandoc/vim-pandoc-syntax'
 Plug 'dhruvasagar/vim-table-mode'
 
 
-Plug 'hari-rangarajan/CCTree'
+"Plug 'hari-rangarajan/CCTree'
 
 " PlantUML UML/sequence scheme language
 Plug 'scrooloose/vim-slumlord'
@@ -123,7 +125,7 @@ Plug 'aklt/plantuml-syntax'
 "Plug 'xolox/vim-lua-ftplugin' " lua completion
 "Plug 'xolox/vim-misc'
 Plug 'chr4/nginx.vim' " nginx.conf 
-Plug 'Valloric/YouCompleteMe'
+"Plug 'Valloric/YouCompleteMe'
 
 Plug 'rhysd/vim-clang-format'
 Plug 'tpope/vim-surround' " ds, cs, yss"
@@ -143,11 +145,11 @@ call plug#end()
 set backspace=indent,eol,start
 
 " configure tabs and spaces
-set noexpandtab " insert tabs 
+set expandtab " insert tabs 
 set smarttab
-set tabstop=4
-set softtabstop=4
-set shiftwidth=4
+set tabstop=2
+set softtabstop=2
+set shiftwidth=2
 set shiftround
 set completeopt+=longest
 set autoindent
@@ -155,6 +157,9 @@ set autoindent
 set hlsearch " hightlight search text
 set incsearch
 
+
+set showcmd " show command in bottom bar
+set showmatch " hightlight matching [{()}]"
 " Disable arrow keys
 "noremap <Up>	<Nop>
 "noremap <Left>	<Nop>
@@ -192,9 +197,10 @@ highlight ColorColumn guibg=orange
 nnoremap <Leader>m :set cursorline! cursorcolumn!<CR>
 set cursorline cursorcolumn
 
-" Search for word under cursor using //
-vnoremap // y/<C-R>"<CR>
-
 " Show command completion suggestions
 set wildmode=longest,list,full
 set wildmenu
+
+" center result of N/n 
+map N Nzz
+map n nzz
