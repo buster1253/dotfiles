@@ -1,21 +1,17 @@
 """""""""""""""""""
 " NeoVim Settings "
 """""""""""""""""""
+set nocompatible
+filetype plugin on
+syntax on
+
+" autosave for openresty projects TODO make more dynamic
 autocmd BufWritePost * silent !sh $HOME/.config/nvim/scripts/restart_openresty.sh '%:p'
 autocmd BufWritePost * :redraw!
 
 nnoremap <C-*> !sh /home/petter/.config/nvim/scripts/restart_openresty.sh '%:p'
 
-set colorcolumn=81
-set hlsearch " hightlight search text
-set incsearch
 
-" Vimwiki
-set nocompatible
-filetype plugin on
-syntax on
-let g:vimwiki_list = [{'path':'~/.config/vimwiki/',
-	\ 'syntax': 'markdown', 'ext':'.md'}]
 
 " Always show status bar    
 set laststatus=2
@@ -142,6 +138,7 @@ Plug 'easymotion/vim-easymotion'
 " Initialize plugin system
 call plug#end()
 
+
 " fix backspace
 set backspace=indent,eol,start
 
@@ -154,7 +151,9 @@ set shiftwidth=4
 set shiftround
 set completeopt+=longest
 set autoindent
-set noexpandtab
+
+set hlsearch " hightlight search text
+set incsearch
 
 " Disable arrow keys
 "noremap <Up>	<Nop>
@@ -168,6 +167,10 @@ set background=dark
 set termguicolors
 let g:gruvbox_italic=1
 
+" Vimwiki
+au FileType vimwiki set syntax=pandoc
+let g:vimwiki_list = [{'path':'~/.config/vimwiki/', 'syntax': 'markdown', 'ext':'.md'}]
+
 " FZF
 let g:fzf_action = {
 			\ 'ctrl-t': 'tab split',
@@ -180,6 +183,8 @@ if has("autocmd")
 		\| exe "normal! g'\"" | endif
 endif
 
+" Highlight line end for 80 char lines
+set colorcolumn=81
 " Cursor line and column hightlight
 hi CursorLine	cterm=NONE	ctermbg=darkred	ctermfg=white guibg=#3C3836
 hi CursorColumn cterm=NONE ctermbg=darkblue ctermfg=white guibg=#3C3836 
