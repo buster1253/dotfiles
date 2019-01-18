@@ -16,6 +16,7 @@
 !termite/config
 !i3status_rust/config.toml.desktop
 !i3status_rust/config.toml.laptop
+!zsh
 !zsh/.fzf.zsh
 !zsh/.zshrc
 !key_map

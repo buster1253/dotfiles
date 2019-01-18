@@ -6,33 +6,29 @@ if [ -f /etc/os-release ]; then
 	OS=$NAME
 fi
 
-
-# Path to oh-my-zsh installation.
 export TERMINAL="terminology"
 export ZPLUG_HOME=$HOME/.config/zplug
 export LANG="en_US.UTF-8"
 export EDITOR='vim'
 export MYVIMRC=$HOME/.config/vimrc
 export PATH=/usr/local/openresty/bin:$HOME/.cargo/bin:$PATH
+export TERM="xterm-256color"
+
+export FZF_DEFAULT_OPTS='--height 40%'
 
 # Install zplug if not installed
 [ ! -d ~/.config/zplug ] && git clone https://github.com/zplug/zplug ~/.config/zplug
 source ~/.config/zplug/init.zsh
 
-export FZF_DEFAULT_OPTS='--height 40%'
 
 zplug 'zplug/zplug', hook-build:'zplug --self-manage'
 
 # Zplug pluggins
-
-zplug "zsh-users/zsh-syntax-highlighting", defer:2
-
-# Load theme
-zplug "plugins/git", from:oh-my-zsh
 zplug "plugins/colored-man-pages", from:oh-my-zsh
 zplug "plugins/colorize", from:oh-my-zsh
-
+zplug "plugins/vi-mode", from:oh-my-zsh
 zplug "denysdovhan/spaceship-prompt", use:spaceship.zsh, from:github, as:theme
+zplug "zsh-users/zsh-syntax-highlighting", defer:2
 zplug load
 
 # SPACESHIP CONF
@@ -45,29 +41,27 @@ SPACESHIP_PROMPT_ORDER=(
 	host			# Hostname section
 	git
 	hg				# Mercurial section (hg_branch	+ hg_status)
-	package			# Package version
-	node			# Node.js section
-	ruby			# Ruby section
-	elixir			# Elixir section
-	xcode			# Xcode section
-	swift			# Swift section
-	golang			# Go section
-	php				# PHP section
+	#package			# Package version
+	#node			# Node.js section
+	#ruby			# Ruby section
+	#elixir			# Elixir section
+	#xcode			# Xcode section
+	#swift			# Swift section
+	#golang			# Go section
+	#php				# PHP section
 	rust			# Rust section
-	haskell			# Haskell Stack section
-	julia			# Julia section
-	docker			# Docker section
-	aws				# Amazon Web Services section
-	venv			# virtualenv section
-	conda			# conda virtualenv section
-	pyenv			# Pyenv section
-	dotnet			# .NET section
-	ember			# Ember.js section
-	kubecontext		# Kubectl context section
-	exec_time		# Execution time
+	#haskell			# Haskell Stack section
+	#julia			# Julia section
+	#docker			# Docker section
+	#aws				# Amazon Web Services section
+	#venv			# virtualenv section
+	#conda			# conda virtualenv section
+	#pyenv			# Pyenv section
+	#dotnet			# .NET section
+	#ember			# Ember.js section
+	#kubecontext		# Kubectl context section
+	#exec_time		# Execution time
 	line_sep		# Line break
-#	battery			# Battery level and status
-	vi_mode			# Vi-mode indicator
 	jobs			# Background jobs indicator
 	exit_code		# Exit code section
 	char			# Prompt character
@@ -75,6 +69,8 @@ SPACESHIP_PROMPT_ORDER=(
 
 # RIGHT PROMPT ORDER
 SPACESHIP_RPROMPT_ORDER=(
+  battery			# Battery level and status
+	vi_mode			# Vi-mode indicator
 )
 
 
@@ -85,6 +81,10 @@ SPACESHIP_PROMPT_FIRST_PREFIX_SHOW=false
 # CHAR
 SPACESHIP_CHAR_PREFIX=""
 SPACESHIP_CHAR_SUFFIX=""
+SPACESHIP_CHAR_SYMBOL=":"
+
+# DIR
+SPACESHIP_DIR_LOCK_SYMBOL=" "
 
 # USER
 SPACESHIP_USER_SHOW=true
@@ -101,15 +101,15 @@ SPACESHIP_GIT_BRANCH_SUFFIX=""
 SPACESHIP_GIT_STATUS_PREFIX=""
 SPACESHIP_GIT_STATUS_SUFFIX=""
 
-SPACESHIP_PHP_SHOW=true
+SPACESHIP_PHP_SHOW=false
 SPACESHIP_PHP_PREFIX=' php:('
 SPACESHIP_PHP_SYMBOL=''
 SPACESHIP_PHP_SUFFIX=')'
 
 SPACESHIP_RUST_SYMBOL=''
 
-#SPACESHIP_VI_MODE_INSERT="I"
-#SPACESHIP_VI_MODE_NORMAL="N"
+SPACESHIP_VI_MODE_INSERT="[I]"
+SPACESHIP_VI_MODE_NORMAL="[N]"
 
 # True colors
 #export TERM='xterm-termite'
@@ -141,7 +141,7 @@ CASE_SENSITIVE="true"
 # export UPDATE_ZSH_DAYS=13
 
 # Uncomment the following line to disable colors in ls.
-# DISABLE_LS_COLORS="true"
+#DISABLE_LS_COLORS="true"
 
 # Uncomment the following line to disable auto-setting terminal title.
 # DISABLE_AUTO_TITLE="true"
@@ -177,23 +177,22 @@ export ARCHFLAGS="-arch x86_64"
 # ssh
 # export SSH_KEY_PATH="~/.ssh/rsa_id"
 
-# Set personal aliases, overriding those provided by oh-my-zsh libs,
-# plugins, and themes. Aliases can be placed here, though oh-my-zsh
-# users are encouraged to define aliases within the ZSH_CUSTOM folder.
-# For a full list of active aliases, run `alias`.
-#
-
-# Termite new terminal in current directory
-if [[ $TERM == xterm-termite ]]; then
-	. /etc/profile.d/vte-2.91.sh
-	__vte_osc7
-fi
-
-alias vi='vim -u ~/.config/vimrc'
 alias vim='vim -u ~/.config/vimrc'
+alias vi='vim'
 alias ls='ls --color=auto'
 alias pac='sudo pacman'
+# git
+alias ga='git add'
+alias gd='git diff'
+alias gc='git commit'
+alias gp='git pull'
+alias pg='git push'
+alias gs='git status'
+alias gco='git checkout'
 # Vi mode
 bindkey -v
+
+# quick search
+ffs() { firefox --new-tab "https://duckduckgo.com/?q=$*"; }
 
 [ -f ~/.config/zsh/.fzf.zsh ] && source ~/.config/zsh/.fzf.zsh

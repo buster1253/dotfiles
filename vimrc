@@ -6,10 +6,21 @@ filetype plugin on
 syntax on
 
 " Run auto reload script on save, used for openresty
-autocmd BufWritePost * silent !sh $HOME/.config/nvim/scripts/restart_openresty.sh '%:p'
+autocmd BufWritePost * silent !sh $HOME/.config/tools/scripts/restart_openresty.sh '%:p'
 autocmd BufWritePost * :redraw!
 
 nnoremap <C-*> !sh /home/petter/.config/nvim/scripts/restart_openresty.sh '%:p'
+
+" split direction
+set splitbelow
+set splitright
+
+
+" Easier split navigation
+nnoremap <C-J> <C-W><C-J>
+nnoremap <C-K> <C-W><C-K>
+nnoremap <C-L> <C-W><C-L>
+nnoremap <C-H> <C-W><C-H>
 
 set clipboard=unnamed " yank cross terminals
 
@@ -114,10 +125,6 @@ Plug 'vimwiki/vimwiki'
 Plug 'vim-pandoc/vim-pandoc'
 Plug 'vim-pandoc/vim-pandoc-syntax'
 Plug 'dhruvasagar/vim-table-mode'
-
-
-"Plug 'hari-rangarajan/CCTree'
-
 " PlantUML UML/sequence scheme language
 Plug 'scrooloose/vim-slumlord'
 Plug 'aklt/plantuml-syntax'
@@ -134,6 +141,7 @@ Plug 'morhetz/gruvbox'
 "Plug 'arcticicestudio/nord-vim'
 "Plug 'icymind/NeoSolarized'
 "Plug 'mhartington/oceanic-next'
+Plug 'rust-lang/rust.vim'
 
 " ord mode
 Plug 'easymotion/vim-easymotion'
@@ -145,11 +153,11 @@ call plug#end()
 set backspace=indent,eol,start
 
 " configure tabs and spaces
-set expandtab " insert tabs 
+"set expandtab " insert tabs 
 set smarttab
-set tabstop=2
-set softtabstop=2
-set shiftwidth=2
+set tabstop=4
+set softtabstop=4
+set shiftwidth=4
 set shiftround
 set completeopt+=longest
 set autoindent
@@ -201,6 +209,19 @@ set cursorline cursorcolumn
 set wildmode=longest,list,full
 set wildmenu
 
-" center result of N/n 
+" center result of N/n
 map N Nzz
 map n nzz
+
+nnoremap <C-w>z :mksession! ~/session.vim<CR>
+nnoremap <C-w>o :mksession! ~/session.vim<CR>:wincmd o<CR>
+nnoremap <C-w>u :source ~/session.vim<CR>
+
+" Show trailing whitespace and spaces before a tab:
+highlight ExtraWhitespace ctermbg=red guibg=red
+highlight SpaceIndents ctermbg=red guibg=red
+autocmd BufWinEnter * match ExtraWhitespace /^\s* \s*\|\s\+$/
+
+"autocmd BufWinEnter * match SpaceIndents  /^\t*\zs \+/
+
+"autocmd BufWinEnter * match SpaceIndents /\s\+$/
