@@ -26,7 +26,7 @@ set clipboard=unnamed " yank cross terminals
 
 set colorcolumn=81
 
-" Always show status bar    
+" Always show status bar
 set laststatus=2
 set statusline=%{fugitive#statusline()}
 
@@ -56,14 +56,14 @@ let g:airline_powerline_fonts = 1
 let g:airline#extensions#ale#enabled = 1
 """""""""""""""""""""
 " /Airline settings "
-"""""""""""""""""""""		
+"""""""""""""""""""""
 highlight Comment cterm=italic
 set directory=$HOME/.vim/swap//
 
 
 " NERDTree
 " Autoclose vim if NERDTree is only open window
-autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") 
+autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree")
 			\&& b:NERDTree.isTabTree()) | q | endif
 " /NERDTree
 
@@ -82,9 +82,9 @@ set nu
 " /markdown "
 """""""""""""
 if empty(glob('~/.vim/autoload/plug.vim'))
-  silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs
-    \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
-  autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
+	silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs
+		\ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+	autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
 endif
 " Specify a directory for plugins
 " - For Neovim: ~/.local/share/nvim/plugged
@@ -100,7 +100,7 @@ Plug 'scrooloose/nerdtree', { 'on':  'NERDTreeToggle' }
 Plug 'scrooloose/nerdcommenter'
 Plug 'Xuyuanp/nerdtree-git-plugin'
 
-Plug '~/.fzf'
+"Plug '~/.fzf'
 Plug 'junegunn/fzf.vim'
 " Vim-airline for powerline
 Plug 'vim-airline/vim-airline'
@@ -135,7 +135,7 @@ Plug 'chr4/nginx.vim' " nginx.conf
 "Plug 'Valloric/YouCompleteMe'
 
 Plug 'rhysd/vim-clang-format'
-Plug 'tpope/vim-surround' " ds, cs, yss"
+Plug 'tpope/vim-surround' " ds, cs, yss "
 " Themes
 Plug 'morhetz/gruvbox'
 "Plug 'arcticicestudio/nord-vim'
@@ -143,14 +143,14 @@ Plug 'morhetz/gruvbox'
 "Plug 'mhartington/oceanic-next'
 Plug 'rust-lang/rust.vim'
 
+Plug 'Dimercel/todo-vim'
+
 " ord mode
 Plug 'easymotion/vim-easymotion'
 " Initialize plugin system
 call plug#end()
 
 
-" fix backspace
-set backspace=indent,eol,start
 
 " configure tabs and spaces
 "set expandtab " insert tabs 
@@ -161,6 +161,8 @@ set shiftwidth=4
 set shiftround
 set completeopt+=longest
 set autoindent
+" fix backspace
+set backspace=indent,eol,start
 
 set hlsearch " hightlight search text
 set incsearch
@@ -219,9 +221,9 @@ nnoremap <C-w>u :source ~/session.vim<CR>
 
 " Show trailing whitespace and spaces before a tab:
 highlight ExtraWhitespace ctermbg=red guibg=red
-highlight SpaceIndents ctermbg=red guibg=red
 autocmd BufWinEnter * match ExtraWhitespace /^\s* \s*\|\s\+$/
+autocmd InsertEnter * match ExtraWhitespace /^\s* \s*\|\s\+\%#\@<!$/
+autocmd InsertLeave * match ExtraWhitespace /^\s* \s*\|\s\+$/
+autocmd BufWinLeave * call clearmatches()
 
-"autocmd BufWinEnter * match SpaceIndents  /^\t*\zs \+/
-
-"autocmd BufWinEnter * match SpaceIndents /\s\+$/
+nmap <F5> :TODOToggle <CR>
