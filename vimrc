@@ -6,7 +6,7 @@ filetype plugin on
 syntax on
 
 " Run auto reload script on save, used for openresty
-autocmd BufWritePost * silent !sh $HOME/.config/tools/scripts/restart_openresty.sh '%:p'
+"autocmd BufWritePost * silent !sh $HOME/.config/tools/scripts/restart_openresty.sh '%:p'
 autocmd BufWritePost * :redraw!
 
 nnoremap <C-*> !sh /home/petter/.config/nvim/scripts/restart_openresty.sh '%:p'
@@ -23,8 +23,6 @@ nnoremap <C-L> <C-W><C-L>
 nnoremap <C-H> <C-W><C-H>
 
 set clipboard=unnamed " yank cross terminals
-
-set colorcolumn=81
 
 " Always show status bar
 set laststatus=2
@@ -131,7 +129,7 @@ Plug 'aklt/plantuml-syntax'
 
 "Plug 'xolox/vim-lua-ftplugin' " lua completion
 "Plug 'xolox/vim-misc'
-Plug 'chr4/nginx.vim' " nginx.conf 
+Plug 'chr4/nginx.vim' " nginx.conf
 "Plug 'Valloric/YouCompleteMe'
 
 Plug 'rhysd/vim-clang-format'
@@ -153,7 +151,7 @@ call plug#end()
 
 
 " configure tabs and spaces
-"set expandtab " insert tabs 
+"set expandtab " insert tabs
 set smarttab
 set tabstop=4
 set softtabstop=4
@@ -167,14 +165,15 @@ set backspace=indent,eol,start
 set hlsearch " hightlight search text
 set incsearch
 
+set relativenumber
 
 set showcmd " show command in bottom bar
 set showmatch " hightlight matching [{()}]"
 " Disable arrow keys
-"noremap <Up>	<Nop>
-"noremap <Left>	<Nop>
-"noremap <Right> <Nop>
-"noremap <Down>	<Nop>
+noremap <Up>	<Nop>
+noremap <Left>	<Nop>
+noremap <Right> <Nop>
+noremap <Down>	<Nop>
 
 " Theme
 colorscheme gruvbox
@@ -200,10 +199,10 @@ endif
 
 " Highlight line end for 80 char lines
 set colorcolumn=81
+highlight ColorColumn ctermbg=blue guibg=#fabd2f
 " Cursor line and column hightlight
-hi CursorLine	cterm=NONE	ctermbg=darkred	ctermfg=white guibg=#3C3836
-hi CursorColumn cterm=NONE ctermbg=darkblue ctermfg=white guibg=#3C3836 
-highlight ColorColumn guibg=orange
+hi CursorLine   cterm=NONE	ctermbg=darkred	ctermfg=white guibg=#3C3836
+hi CursorColumn cterm=NONE ctermbg=darkblue ctermfg=white guibg=#3C3836
 nnoremap <Leader>m :set cursorline! cursorcolumn!<CR>
 set cursorline cursorcolumn
 
@@ -219,11 +218,17 @@ nnoremap <C-w>z :mksession! ~/session.vim<CR>
 nnoremap <C-w>o :mksession! ~/session.vim<CR>:wincmd o<CR>
 nnoremap <C-w>u :source ~/session.vim<CR>
 
+highlight NonText ctermbg=NONE guibg=NONE ctermfg=green guifg=#689d6a
+highlight SpecialKey ctermbg=NONE guibg=NONE ctermfg=green guifg=#689d6a
+
+nmap <Leader>l :set list! listchars=tab:\ ,trail:· <CR>
+
 " Show trailing whitespace and spaces before a tab:
 highlight ExtraWhitespace ctermbg=red guibg=red
-autocmd BufWinEnter * match ExtraWhitespace /^\s* \s*\|\s\+$/
-autocmd InsertEnter * match ExtraWhitespace /^\s* \s*\|\s\+\%#\@<!$/
-autocmd InsertLeave * match ExtraWhitespace /^\s* \s*\|\s\+$/
+match ExtraWhitespace /\s\+$/
+autocmd BufWinEnter * match ExtraWhitespace /\s\+$/
+autocmd InsertEnter * match ExtraWhitespace /\s\+\%#\@<!$/
+autocmd InsertLeave * match ExtraWhitespace /\s\+$/
 autocmd BufWinLeave * call clearmatches()
 
 nmap <F5> :TODOToggle <CR>

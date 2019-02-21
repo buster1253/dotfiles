@@ -12,13 +12,25 @@ fi
 # requirements
 # hightlight http://www.andre-simon.de/doku/highlight/en/highlight.php
 		#| sed -n 's/\([^.]\+\).\([a-Z]*\)[.orig]\?:\([0-9]\+\)/\1\t\2\t\3\t/p'\
+#pv() {
+	#grep -rn $@ \
+		#| sed -n 's/\([^.]\+\).\([a-zA-Z]*\)[.orig]\?:\([0-9]\+\)/\1\t\2\t\3\t/p'\
+		#| fzf \
+			#--preview 'tail +{3} {1}.{2} | highlight --force -S {2} -O ansi'\
+			#--height 100%\
+			#--bind "enter:execute(vim -u ~/.config/vimrc {1}.{2} +{3} < /dev/tty)"
+#}
+
 pv() {
+	if [ $# -eq 0 ]; then
+		return
+	fi
 	grep -rn $@ \
-		| sed -n 's/\([^.]\+\).\([a-zA-Z]*\)[.orig]\?:\([0-9]\+\)/\1\t\2\t\3\t/p'\
+		| sed 's/\([^.]*\).\([^:]*\):\([0-9]*\):\(.*\).*/\1 \2 \3 \4/' \
 		| fzf \
 			--preview 'tail +{3} {1}.{2} | highlight --force -S {2} -O ansi'\
-			--height 100%\
-			--bind "enter:execute(vim -u ~/.config/vimrc {1}.{2} +{3} < /dev/tty)"
+			--height 100% \
+			--bind "enter:execute(vim {1}.{2} +{3} < /dev/tty)" \
 }
 
 # Key bindings

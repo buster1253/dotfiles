@@ -192,7 +192,17 @@ alias gco='git checkout'
 # Vi mode
 bindkey -v
 
+viman() { text=$(man "$@") && echo "$text" | vim -R +":set ft=man" - ; }
 # quick search
 ffs() { firefox --new-tab "https://duckduckgo.com/?q=$*"; }
+
+fg() {
+	if [[ $# -eq 1 && $1 = - ]]; then
+		fg %-
+	else
+		echo "$@"
+		builtin fg "%$@"
+	fi
+}
 
 [ -f ~/.config/zsh/.fzf.zsh ] && source ~/.config/zsh/.fzf.zsh

@@ -1,5 +1,0 @@
-#start stuff
-exec xrandr --output DP-0 --pos 0x0 --output DP-2 --pos 0x1080 --output DP-4 --pos 1920x0
-exec compton
-#exec feh --recursive --randomize --bg-fill ~/.wallpaper
-exec feh --bg-fill ~/.wallpaper/arch.png
