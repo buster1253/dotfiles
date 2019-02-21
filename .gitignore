@@ -3,7 +3,7 @@
 *
 
 # Whitelist
-
+!file
 !README.md
 !vimrc
 !i3/config.desktop
