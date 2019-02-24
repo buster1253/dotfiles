@@ -6,8 +6,8 @@
 
 !README.md
 !vimrc
-!awesome
-!awesome/**
+#!awesome
+#!awesome/**
 !nvim/init.vim
 !zsh
 !zsh/.fzf.zsh
@@ -15,3 +15,5 @@
 !terminology/*
 !rofi
 !rofi/config
+!st
+!st/config.h

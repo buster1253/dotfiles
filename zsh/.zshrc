@@ -6,15 +6,15 @@ if [ -f /etc/os-release ]; then
 	OS=$NAME
 fi
 
-export TERMINAL="terminology"
+export TERMINAL="termite"
 export ZPLUG_HOME=$HOME/.config/zplug
 export LANG="en_US.UTF-8"
 export EDITOR='vim'
 export MYVIMRC=$HOME/.config/vimrc
 export PATH=/usr/local/openresty/bin:$HOME/.cargo/bin:$PATH
-export TERM="xterm-256color"
+#export TERM="xterm-256color"
 
-export FZF_DEFAULT_OPTS='--height 40%'
+export FZF_DEFAULT_OPTS='--height 80%'
 
 # Install zplug if not installed
 [ ! -d ~/.config/zplug ] && git clone https://github.com/zplug/zplug ~/.config/zplug
@@ -35,7 +35,7 @@ zplug load
 # LEFT PROMPT ORDER
 
 SPACESHIP_PROMPT_ORDER=(
-	time			# Time stampts section
+	#time			# Time stampts section
 	user			# Username section
 	dir				# Current directory section
 	host			# Hostname section
@@ -69,7 +69,7 @@ SPACESHIP_PROMPT_ORDER=(
 
 # RIGHT PROMPT ORDER
 SPACESHIP_RPROMPT_ORDER=(
-  battery			# Battery level and status
+	#battery			# Battery level and status
 	vi_mode			# Vi-mode indicator
 )
 
@@ -87,14 +87,17 @@ SPACESHIP_CHAR_SYMBOL=":"
 SPACESHIP_DIR_LOCK_SYMBOL=" "
 
 # USER
-SPACESHIP_USER_SHOW=true
-SPACESHIP_USER_PREFIX=""
+SPACESHIP_USER_SHOW=always
+#SPACESHIP_USER_PREFIX=""
+#SPACESHIP_USER_SUFFIX="]"
+SPACESHIP_DIR_PREFIX=""
+SPACESHIP_DIR_SUFFIX=""
 
 # GIT
 SPACESHIP_GIT_SYMBOL=""
 SPACESHIP_GIT_BRANCH_PREFIX=""
 # WRAP BRANCH & STATUS IN git:(..)
-SPACESHIP_GIT_PREFIX='git:('
+SPACESHIP_GIT_PREFIX='|git:('
 SPACESHIP_GIT_SUFFIX=")"
 SPACESHIP_GIT_BRANCH_SUFFIX=""
 # REMOVE [] AROUND STATUS
@@ -115,8 +118,8 @@ SPACESHIP_VI_MODE_NORMAL="[N]"
 #export TERM='xterm-termite'
 
 HISTFILE=$HOME/.config/zsh/.zsh_history
-HISTSIZE=1000
-SAVEHIST=1000
+HISTSIZE=10000
+SAVEHIST=10000
 
 # Tab completion menu
 zstyle ':completion:*' menu select
@@ -177,9 +180,9 @@ export ARCHFLAGS="-arch x86_64"
 # ssh
 # export SSH_KEY_PATH="~/.ssh/rsa_id"
 
-alias vim='vim -u ~/.config/vimrc'
 alias vi='vim'
 alias ls='ls --color=auto'
+alias ll='ls -lh'
 alias pac='sudo pacman'
 # git
 alias ga='git add'
@@ -206,3 +209,12 @@ fg() {
 }
 
 [ -f ~/.config/zsh/.fzf.zsh ] && source ~/.config/zsh/.fzf.zsh
+
+if [[ $TERM == xterm-termite ]]; then
+  . /etc/profile.d/vte.sh
+  __vte_osc7
+fi
+
+if [[ -z "$TMUX" ]]; then
+	tmux -2
+fi
