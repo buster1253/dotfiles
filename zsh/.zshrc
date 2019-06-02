@@ -1,134 +1,58 @@
-# If you come from bash you might have to change your $PATH.
-# export PATH=$HOME/bin:/usr/local/bin:$PATH
+# go into window manager for tty1
+if [[ -z $DISPLAY ]] && [[ $(tty) = /dev/tty1 ]]; then
+	pgrep ssh-agent || eval $(ssh-agent)
+	#eval $(ssh-agent)
+	exec sway
+fi
 
 if [ -f /etc/os-release ]; then
 	. /etc/os-release
 	OS=$NAME
 fi
 
-export TERMINAL="termite"
 export ZPLUG_HOME=$HOME/.config/zplug
 export LANG="en_US.UTF-8"
-export EDITOR='vim'
+export EDITOR="vim"
+export TERMINAL="alacritty"
 export MYVIMRC=$HOME/.config/vimrc
-export PATH=/usr/local/openresty/bin:$HOME/.cargo/bin:$PATH
-#export TERM="xterm-256color"
-
+export PATH=/usr/local/openresty/bin:$HOME/.cargo/bin:$HOME/.config/bin:$PATH
 export FZF_DEFAULT_OPTS='--height 80%'
+export XDG_CONFIG_HOME="$HOME/.config"
+export ARCHFLAGS="-arch x86_64"
 
 # Install zplug if not installed
-[ ! -d ~/.config/zplug ] && git clone https://github.com/zplug/zplug ~/.config/zplug
+[ ! -d ~/.config/zplug ] \
+	&& git clone https://github.com/zplug/zplug ~/.config/zplug
 source ~/.config/zplug/init.zsh
 
-
 zplug 'zplug/zplug', hook-build:'zplug --self-manage'
-
-# Zplug pluggins
 zplug "plugins/colored-man-pages", from:oh-my-zsh
 zplug "plugins/colorize", from:oh-my-zsh
-zplug "plugins/vi-mode", from:oh-my-zsh
-zplug "denysdovhan/spaceship-prompt", use:spaceship.zsh, from:github, as:theme
 zplug "zsh-users/zsh-syntax-highlighting", defer:2
 zplug load
 
-# SPACESHIP CONF
-# LEFT PROMPT ORDER
-
-SPACESHIP_PROMPT_ORDER=(
-	#time			# Time stampts section
-	user			# Username section
-	dir				# Current directory section
-	host			# Hostname section
-	git
-	hg				# Mercurial section (hg_branch	+ hg_status)
-	#package			# Package version
-	#node			# Node.js section
-	#ruby			# Ruby section
-	#elixir			# Elixir section
-	#xcode			# Xcode section
-	#swift			# Swift section
-	#golang			# Go section
-	#php				# PHP section
-	rust			# Rust section
-	#haskell			# Haskell Stack section
-	#julia			# Julia section
-	#docker			# Docker section
-	#aws				# Amazon Web Services section
-	#venv			# virtualenv section
-	#conda			# conda virtualenv section
-	#pyenv			# Pyenv section
-	#dotnet			# .NET section
-	#ember			# Ember.js section
-	#kubecontext		# Kubectl context section
-	#exec_time		# Execution time
-	line_sep		# Line break
-	jobs			# Background jobs indicator
-	exit_code		# Exit code section
-	char			# Prompt character
-)
-
-# RIGHT PROMPT ORDER
-SPACESHIP_RPROMPT_ORDER=(
-	#battery			# Battery level and status
-	vi_mode			# Vi-mode indicator
-)
-
-
-# PROMPT
-SPACESHIP_PROMPT_ADD_NEWLINE=false
-SPACESHIP_PROMPT_FIRST_PREFIX_SHOW=false
-
-# CHAR
-SPACESHIP_CHAR_PREFIX=""
-SPACESHIP_CHAR_SUFFIX=""
-SPACESHIP_CHAR_SYMBOL=":"
-
-# DIR
-SPACESHIP_DIR_LOCK_SYMBOL=" "
-
-# USER
-SPACESHIP_USER_SHOW=always
-#SPACESHIP_USER_PREFIX=""
-#SPACESHIP_USER_SUFFIX="]"
-SPACESHIP_DIR_PREFIX=""
-SPACESHIP_DIR_SUFFIX=""
-
-# GIT
-SPACESHIP_GIT_SYMBOL=""
-SPACESHIP_GIT_BRANCH_PREFIX=""
-# WRAP BRANCH & STATUS IN git:(..)
-SPACESHIP_GIT_PREFIX='|git:('
-SPACESHIP_GIT_SUFFIX=")"
-SPACESHIP_GIT_BRANCH_SUFFIX=""
-# REMOVE [] AROUND STATUS
-SPACESHIP_GIT_STATUS_PREFIX=""
-SPACESHIP_GIT_STATUS_SUFFIX=""
-
-SPACESHIP_PHP_SHOW=false
-SPACESHIP_PHP_PREFIX=' php:('
-SPACESHIP_PHP_SYMBOL=''
-SPACESHIP_PHP_SUFFIX=')'
-
-SPACESHIP_RUST_SYMBOL=''
-
-SPACESHIP_VI_MODE_INSERT="[I]"
-SPACESHIP_VI_MODE_NORMAL="[N]"
-
-# True colors
-#export TERM='xterm-termite'
-
+ZLE_RPROMPT_INDENT=0
 HISTFILE=$HOME/.config/zsh/.zsh_history
 HISTSIZE=10000
 SAVEHIST=10000
+setopt HIST_IGNORE_DUPS
+setopt HIST_SAVE_NO_DUPS
+
+# reduce esc delay
+export KEYTIMEOUT=1
 
 # Tab completion menu
 zstyle ':completion:*' menu select
 
-if [ "$OS" = "Ubuntu" ]; then
-	source /etc/zsh_command_not_found
-elif [ "$OS" = "Arch Linux" ]; then
+if [ "$OS" = "Arch Linux" ]; then
 	source /usr/share/doc/pkgfile/command-not-found.zsh
 fi
+
+
+function powerline_precmd() {
+	PS1="$(/home/petter/playground/rust/powerline-rs/target/debug/powerline-rs)"
+}
+precmd_functions+=(powerline_precmd)
 
 # Uncomment the following line to use case-sensitive completion.
 CASE_SENSITIVE="true"
@@ -173,17 +97,18 @@ CASE_SENSITIVE="true"
 # else
 #   export EDITOR='mvim'
 # fi
-export EDITOR='vim'
 # Compilation flags
-export ARCHFLAGS="-arch x86_64"
 
 # ssh
 # export SSH_KEY_PATH="~/.ssh/rsa_id"
 
 alias vi='vim'
+alias vim='nvim'
 alias ls='ls --color=auto'
 alias ll='ls -lh'
 alias pac='sudo pacman'
+alias lua='rlwrap luajit'
+alias pdf='zathura'
 # git
 alias ga='git add'
 alias gd='git diff'
@@ -191,30 +116,37 @@ alias gc='git commit'
 alias gp='git pull'
 alias pg='git push'
 alias gs='git status'
+alias gl='git log'
 alias gco='git checkout'
 # Vi mode
 bindkey -v
 
-viman() { text=$(man "$@") && echo "$text" | vim -R +":set ft=man" - ; }
+# viman() { text=$(man "$@") && echo "$text" | vim -R +":set ft=man" - ; }
 # quick search
-ffs() { firefox --new-tab "https://duckduckgo.com/?q=$*"; }
+# rewrite to luakit if anything
+# ffs() { firefox --new-tab "https://duckduckgo.com/?q=$*"; }
+
+rgrep() {
+	grep -rn $1 | sed -e 's/:\([0-9]*\):/ +\1/'
+}
 
 fg() {
 	if [[ $# -eq 1 && $1 = - ]]; then
 		fg %-
 	else
-		echo "$@"
 		builtin fg "%$@"
 	fi
 }
 
 [ -f ~/.config/zsh/.fzf.zsh ] && source ~/.config/zsh/.fzf.zsh
 
-if [[ $TERM == xterm-termite ]]; then
-  . /etc/profile.d/vte.sh
-  __vte_osc7
-fi
+#if [[ $TERM == xterm-termite ]]; then
+  #. /etc/profile.d/vte.sh
+  #__vte_osc7
+#fi
 
 if [[ -z "$TMUX" ]]; then
 	tmux -2
+	tmux set-environment -g SWAYSOCK /run/user/$(id -u)/sway-ipc.$(id -u).$(pgrep -x sway).sock
 fi
+

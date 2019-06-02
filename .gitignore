@@ -17,3 +17,4 @@
 !rofi/config
 !st
 !st/config.h
+!luakit/*
