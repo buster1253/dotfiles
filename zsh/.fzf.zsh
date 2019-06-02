@@ -11,26 +11,20 @@ fi
 
 # requirements
 # hightlight http://www.andre-simon.de/doku/highlight/en/highlight.php
-		#| sed -n 's/\([^.]\+\).\([a-Z]*\)[.orig]\?:\([0-9]\+\)/\1\t\2\t\3\t/p'\
-#pv() {
-	#grep -rn $@ \
-		#| sed -n 's/\([^.]\+\).\([a-zA-Z]*\)[.orig]\?:\([0-9]\+\)/\1\t\2\t\3\t/p'\
-		#| fzf \
-			#--preview 'tail +{3} {1}.{2} | highlight --force -S {2} -O ansi'\
-			#--height 100%\
-			#--bind "enter:execute(vim -u ~/.config/vimrc {1}.{2} +{3} < /dev/tty)"
-#}
 
 pv() {
 	if [ $# -eq 0 ]; then
 		return
+	elif [ $# -eq 1 ]; then
+		2="*"
 	fi
-	grep -rn $@ \
-		| sed 's/\([^.]*\).\([^:]*\):\([0-9]*\):\(.*\).*/\1 \2 \3 \4/' \
+	grep -rn $1 --include \*.$2 --exclude=tags \
 		| fzf \
-			--preview 'tail +{3} {1}.{2} | highlight --force -S {2} -O ansi'\
+			--delimiter=: \
+			--preview 'l={2};
+				highlight --force {1} -O ansi --line-range=$l-$(($l+40))' \
 			--height 100% \
-			--bind "enter:execute(vim {1}.{2} +{3} < /dev/tty)" \
+			--bind "enter:execute(vim {1} +{2} < /dev/tty)" \
 }
 
 # Key bindings
