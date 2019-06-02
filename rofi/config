@@ -1,5 +1,5 @@
 ! "Enabled modi" Set from: Default
-! rofi.modi:                           window,run,ssh,combi
+rofi.modi:                           ssh,combi
 ! "Window width" Set from: Default
 ! rofi.width:                          50
 ! "Number of lines" Set from: Default
@@ -7,9 +7,9 @@
 ! "Number of columns" Set from: Default
 ! rofi.columns:                        1
 ! "Font to use" Set from: Default
-rofi.font:                           ShureTechMono 14
+rofi.font:                           Roboto Mono NerdFont 12
 ! "Border width" Set from: Default
-! rofi.bw:                             1
+rofi.bw:                             1
 ! "Location on screen" Set from: Default
 ! rofi.location:                       0
 ! "Padding" Set from: Default
@@ -23,7 +23,7 @@ rofi.font:                           ShureTechMono 14
 ! "Whether to load and show icons" Set from: Default
 ! rofi.show-icons:                     false
 ! "Terminal to use" Set from: Default
-! rofi.terminal:                       rofi-sensible-terminal
+rofi.terminal:                       alacritty
 ! "Ssh client to use" Set from: Default
 ! rofi.ssh-client:                     ssh
 ! "Ssh command to execute" Set from: Default
@@ -53,7 +53,7 @@ rofi.font:                           ShureTechMono 14
 ! "Cycle through the results list" Set from: Default
 ! rofi.cycle:                          true
 ! "Enable sidebar-mode" Set from: Default
-! rofi.sidebar-mode:                   false
+rofi.sidebar-mode:                   true
 ! "Row height (in chars)" Set from: Default
 ! rofi.eh:                             1
 ! "Enable auto select mode" Set from: Default
@@ -69,19 +69,19 @@ rofi.font:                           ShureTechMono 14
 ! "Tokenize input string" Set from: Default
 ! rofi.tokenize:                       true
 ! "Monitor id to show on" Set from: Default
-! rofi.m:                              -5
+rofi.m:                              -4
 ! "Margin between rows *DEPRECATED*" Set from: Default
 ! rofi.line-margin:                    2
 ! "Padding within rows *DEPRECATED*" Set from: Default
 ! rofi.line-padding:                   1
 ! "Pre-set filter" Set from: Default
-! rofi.filter:                         
+! rofi.filter:
 ! "Separator style (none, dash, solid) *DEPRECATED*" Set from: Default
-! rofi.separator-style:                dash
+rofi.separator-style:                solid
 ! "Hide scroll-bar *DEPRECATED*" Set from: Default
-! rofi.hide-scrollbar:                 false
+ rofi.hide-scrollbar:                 false
 ! "Fullscreen" Set from: Default
-! rofi.fullscreen:                     false
+rofi.fullscreen:                     false
 ! "Fake transparency *DEPRECATED*" Set from: Default
 ! rofi.fake-transparency:              false
 ! "DPI" Set from: Default
@@ -101,7 +101,7 @@ rofi.font:                           ShureTechMono 14
 ! "Indicate how it match by underlining it." Set from: Default
 ! rofi.show-match:                     true
 ! "New style theme file" Set from: Default
-! rofi.theme:                          
+rofi.theme: /usr/share/rofi/themes/gruvbox-dark.rasi
 ! "Color scheme for normal row" Set from: Default
 ! rofi.color-normal:                   
 ! "Color scheme for urgent row" Set from: Default
@@ -274,4 +274,3 @@ rofi.kb-row-down:                    Down,Control+j
 ! rofi.me-accept-entry:                MouseDPrimary
 ! "Accept hovered row with custom action" Set from: Default
 ! rofi.me-accept-custom:               Control+MouseDPrimary
-rofi.theme: /usr/share/rofi/themes/gruvbox-dark.rasi
