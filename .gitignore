@@ -21,3 +21,5 @@
 !luakit/*
 !sway
 !sway/*
+!alacritty
+!alacritty/*
