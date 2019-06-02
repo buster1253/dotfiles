@@ -1,0 +1,228 @@
+set $mod Mod4
+set $left h
+set $down j
+set $up k
+set $right l
+set $swaylock 'swaylock -f -i ~/downloads/bluescreen.png'
+
+xwayland enable
+
+set $menu rofi -show combi
+## run using xwayland until they fix the primary selection clipboard
+set $term 'env WINIT_UNIX_BACKEND=x11 alacritty'
+# remove when alacritty clipboard works
+exec xrdb -load ~/.Xresources
+
+
+			     #border  │ bg       │  text   │  indicator │ child_border
+client.focused   #458488 #282828 #ffffff #fabd2f #d65d0e
+client.unfocused #282828 #282828 #000000 #282828 #282828
+default_border pixel 2px
+
+font pango:Roboto Mono NerdFont normal 14px
+
+## Spotify keybindings
+set $spotify dbus-send --print-reply --dest=org.mpris.MediaPlayer2.spotify \
+             /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player
+set $spotify_play $spotify.PlayPause
+set $spotify_next $spotify.Next
+set $spotify_prev $spotify.Previous
+
+bindsym $mod+p       exec $spotify_play
+bindsym $mod+shift+n exec $spotify_next
+bindsym $mod+shift+p exec $spotify_prev
+
+## various settings
+tiling_drag disable
+
+### Output configuration
+output * bg ~/downloads/touch-2560×1440.jpg fill
+
+## work
+output eDP-1 res 1920x1080 pos 0,0
+output DP-4 res 1920x1080 pos -1920,0
+output DP-7 res 1920x1080 pos -3840,0
+
+exec swayidle -w \
+	timeout 300 $swaylock \
+	timeout 600 'swaymsg "output * dpms off"' \
+		resume 'swaymsg "output * dpms on"' \
+	before-sleep $swaylock
+
+input * {
+	xkb_layout no
+	xkb_variant ,nodeadkeys
+	xkb_options caps:escape
+}
+
+input 1386:789:Wacom_Intuos_Pro_M_Pen map_to_output DP-1
+#input 1386:789:Wacom_Intuos_Pro_M_Pen map_to_region 1920x1080@3840,1920
+
+
+bindsym $mod+Return exec $term
+bindsym $mod+Shift+q kill
+bindsym $mod+d exec $menu
+bindsym $mod+Shift+r reload
+bindsym $mod+Shift+c exec 'swaymsg exit'
+bindsym $mod+o exec $swaylock
+
+## Move focus
+bindsym $mod+$left focus left
+bindsym $mod+$down focus down
+bindsym $mod+$up focus up
+bindsym $mod+$right focus right
+
+## _move_ the focused window
+bindsym $mod+Shift+$left move left
+bindsym $mod+Shift+$down move down
+bindsym $mod+Shift+$up move up
+bindsym $mod+Shift+$right move right
+
+set $ws1   '1'
+set $ws2   '2'
+set $ws3   '3'
+set $ws4   '4'
+set $ws5   '5'
+set $ws6   '6'
+set $ws7   '7'
+set $ws8   '8'
+set $ws9   '9'
+set $ws0   '0'
+set $wsF1  'F1'
+set $wsF2  'F2'
+set $wsF3  'F3'
+set $wsF4  'F4'
+set $wsF5  'F5'
+set $wsF6  'F6'
+set $wsF7  'F7'
+set $wsF8  'F8'
+set $wsF9  'F9'
+set $wsF10 'F10'
+set $wsF11 'F11'
+set $wsF12 'F12'
+
+# Goto
+bindsym $mod+1   workspace $ws1
+bindsym $mod+2   workspace $ws2
+bindsym $mod+3   workspace $ws3
+bindsym $mod+4   workspace $ws4
+bindsym $mod+5   workspace $ws5
+bindsym $mod+6   workspace $ws6
+bindsym $mod+7   workspace $ws7
+bindsym $mod+8   workspace $ws8
+bindsym $mod+9   workspace $ws9
+bindsym $mod+0   workspace $ws0
+bindsym $mod+F1  workspace $wsF1
+bindsym $mod+F2  workspace $wsF2
+bindsym $mod+F3  workspace $wsF3
+bindsym $mod+F4  workspace $wsF4
+bindsym $mod+F5  workspace $wsF5
+bindsym $mod+F6  workspace $wsF6
+bindsym $mod+F7  workspace $wsF7
+bindsym $mod+F8  workspace $wsF8
+bindsym $mod+F9  workspace $wsF9
+bindsym $mod+F10 workspace $wsF10
+bindsym $mod+F11 workspace $wsF11
+bindsym $mod+F12 workspace $wsF12
+# move to
+bindsym $mod+Shift+1 move container to workspace $ws1
+bindsym $mod+Shift+2 move container to workspace $ws2
+bindsym $mod+Shift+3 move container to workspace $ws3
+bindsym $mod+Shift+4 move container to workspace $ws4
+bindsym $mod+Shift+5 move container to workspace $ws5
+bindsym $mod+Shift+6 move container to workspace $ws6
+bindsym $mod+Shift+7 move container to workspace $ws7
+bindsym $mod+Shift+8 move container to workspace $ws8
+bindsym $mod+Shift+9 move container to workspace $ws9
+bindsym $mod+Shift+0 move container to workspace $ws0
+bindsym $mod+Shift+F1 move container to workspace $wsF1
+bindsym $mod+Shift+F2 move container to workspace $wsF2
+bindsym $mod+Shift+F3 move container to workspace $wsF3
+bindsym $mod+Shift+F4 move container to workspace $wsF4
+bindsym $mod+Shift+F5 move container to workspace $wsF5
+bindsym $mod+Shift+F6 move container to workspace $wsF6
+bindsym $mod+Shift+F7 move container to workspace $wsF7
+bindsym $mod+Shift+F8 move container to workspace $wsF8
+bindsym $mod+Shift+F9 move container to workspace $wsF9
+bindsym $mod+Shift+F10 move container to workspace $wsF10
+bindsym $mod+Shift+F11 move container to workspace $wsF11
+bindsym $mod+Shift+F12 move container to workspace $wsF12
+
+#bindsym $mod+$x workspace $group:$x
+
+workspace $ws1 output eDP-1
+workspace $ws2 output HDMI-A-2
+workspace $ws3 output DP-1
+
+for_window [app_id="floating"] floating enable
+
+# Layout stuff:
+bindsym $mod+g splith
+bindsym $mod+v splitv
+
+# Switch the current container between different layout styles
+bindsym $mod+s layout stacking
+bindsym $mod+w layout tabbed
+bindsym $mod+e layout toggle split
+
+# Make the current focus fullscreen
+bindsym $mod+f fullscreen
+
+# Toggle the current focus between tiling and floating mode
+bindsym $mod+Shift+space floating toggle
+
+# Swap focus between the tiling area and the floating area
+bindsym $mod+space focus mode_toggle
+
+# move focus to the parent container
+bindsym $mod+a focus parent
+
+bindsym XF86AudioRaiseVolume exec pactl set-sink-volume @DEFAULT_SINK@ +5%
+bindsym XF86AudioLowerVolume exec pactl set-sink-volume @DEFAULT_SINK@ -5%
+bindsym XF86AudioMute exec pactl set-sink-mute @DEFAULT_SINK@ toggle
+bindsym XF86AudioMicMute exec pactl set-source-mute @DEFAULT_SOURCE@ toggle
+bindsym XF86MonBrightnessDown exec brightnessctl set 5%-
+bindsym XF86MonBrightnessUp exec brightnessctl set +5%
+#
+# Scratchpad:
+#
+    # Move the currently focused window to the scratchpad
+    bindsym $mod+Shift+minus move scratchpad
+
+    # Show the next scratchpad window or hide the focused scratchpad window.
+    # If there are multiple scratchpad windows, this command cycles through them.
+    bindsym $mod+minus scratchpad show
+#
+# Resizing containers:
+#
+mode "resize" {
+    bindsym $left resize shrink width 10px
+    bindsym $down resize grow height 10px
+    bindsym $up resize shrink height 10px
+    bindsym $right resize grow width 10px
+
+    # return to default mode
+    bindsym Return mode "default"
+    bindsym Escape mode "default"
+}
+bindsym $mod+r mode "resize"
+
+bar {
+    position top
+	workspace_buttons true
+	font RobotoMono Nerd Font normal 15px
+	mode hide
+
+	#swaybar_command /bin/bash ~/.config/sway/bashbar.sh
+	#status_command while ~/.config/sway/bashbar.sh; do sleep 1; done
+	status_command ~/.config/sway/luabar.lua
+
+    colors {
+        statusline #ebdbb2
+        background #282828
+        inactive_workspace #665c54 #282828 #5c5c5c
+		focused_workspace  #d65d0e #665c54 #fbf1c7
+    }
+}
+
+include /etc/sway/config.d/*
