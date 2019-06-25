@@ -1,0 +1,8 @@
+#!/bin/bash
+
+SCREEN_POS=$(swaymsg -t get_outputs \
+	| jq -r '.[] | select(.focused).rect | "\(.width)x\(.height)+\(.x)+\(.y)"')
+
+XWAYLAND_OUTPUT=$(xrandr | grep "$SCREEN_POS" | cut -d' ' -f 1)
+
+echo "$XWAYLAND_OUTPUT"
