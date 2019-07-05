@@ -1,3 +1,6 @@
 [submodule "awesome"]
 	path = awesome
 	url = https://github.com/buster1253/awesome_i3
+[submodule "powerline-rs"]
+	path = powerline-rs
+	url = https://github.com/buster1253/powerline-rs.git

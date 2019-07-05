@@ -8,6 +8,7 @@
 !install.sh
 !README.md
 !vimrc
+!powerline-rs
 #!awesome
 #!awesome/**
 !nvim/init.vim

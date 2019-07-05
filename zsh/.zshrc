@@ -49,7 +49,7 @@ fi
 
 
 function powerline_precmd() {
-	PS1="$(/home/petter/playground/rust/powerline-rs/target/debug/powerline-rs)"
+	PS1="$($XDG_CONFIG_HOME/powerline-rs/target/debug/powerline-rs)"
 }
 precmd_functions+=(powerline_precmd)
 
@@ -153,4 +153,6 @@ if [[ -z "$TMUX" ]]; then
 	tmux set-environment -g SWAYSOCK /run/user/$(id -u)/sway-ipc.$(id -u).$(pgrep -x sway).sock
 fi
 
-source /usr/share/nvm/init-nvm.sh
+if [ -f /usr/share/nvm/init-nvm.sh ]; then
+	source /usr/share/nvm/init-nvm.sh
+fi

@@ -2,10 +2,9 @@
 
 source pkgs
 
-pac -S $PKGS_PAC
+sudo pacman -S ${PKGS_PAC[@]}
 
-yay -S $PKGS_YAY
-
+yay -S ${PKGS_YAY[@]}
 
 
 ## tmux
