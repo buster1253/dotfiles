@@ -1,0 +1,6 @@
+#!/bin/bash
+
+PKGS_PAC=("wayland" "sway" "swayidle" "tmux" "git" "zathura")
+
+PKGS_YAY=("luakit-git" "alacritty-git")
+

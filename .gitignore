@@ -4,6 +4,8 @@
 
 # Whitelist
 
+!pkgs
+!install.sh
 !README.md
 !vimrc
 #!awesome
@@ -12,14 +14,17 @@
 !zsh
 !zsh/.fzf.zsh
 !zsh/.zshrc
-!terminology/*
+!zsh/zshrc
 !rofi
 !rofi/config
-!st
-!st/config.h
 !luakit
 !luakit/*
 !sway
 !sway/*
 !alacritty
 !alacritty/*
+!bin
+!bin/get_xwayland_output
+!bin/sway_rofi
+!tmux
+!tmux/tmux.conf

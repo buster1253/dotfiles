@@ -1,3 +1,5 @@
+-- TODO dont escape, check if favicon is available and add to rofi
+
 local ipairs = ipairs
 local format = string.format
 local escape = require "lousy".util.escape
@@ -8,7 +10,7 @@ local join = function(s)
     return concat(s, '\n')
 end
 
-local rofi = 'rofi -dmenu -i -matching normal'
+local rofi = "sway_rofi -dmenu -i -matching normal"
 
 local _M = {}
 
@@ -16,15 +18,16 @@ _M.db = sqlite3{ filename = luakit.data_dir .. "/bookmarks.db" }
 
 _M.tabs = function(w)
     local rows = {}
+    local cur = w.tabs:current() - 1
     for _, view in ipairs(w.tabs.children) do
         -- on reload title is not available
         if not escape(view.title) then
-            insert(rows, escape(view.uri))
+            insert(rows, view.uri)
         else
-            insert(rows, escape(view.title))
+            insert(rows, view.uri .. " : " .. view.title)
         end
     end
-    local selector = io.popen(format("echo -e '%s' | %s", join(rows), rofi))
+    local selector = io.popen(format("echo '%s' | %s -selected-row %s -a %s", join(rows), rofi, cur, cur))
     local selected = selector:read("*line")
 
     for i,v in ipairs(rows) do
@@ -41,7 +44,7 @@ _M.bookmarks = function(w, newtab)
         insert(rows, bookmark.title)
     end
 
-    local selector = io.popen(format("echo -e '%s' | %s", join(rows), rofi))
+    local selector = io.popen(format("echo '%s' | %s", join(rows), rofi))
     local selected = selector:read("*line")
 
     for i,bookmark in ipairs(bookmarks) do

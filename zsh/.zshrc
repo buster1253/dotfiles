@@ -1,15 +1,3 @@
-# go into window manager for tty1
-if [[ -z $DISPLAY ]] && [[ $(tty) = /dev/tty1 ]]; then
-	pgrep ssh-agent || eval $(ssh-agent)
-	#eval $(ssh-agent)
-	exec sway
-fi
-
-if [ -f /etc/os-release ]; then
-	. /etc/os-release
-	OS=$NAME
-fi
-
 export ZPLUG_HOME=$HOME/.config/zplug
 export LANG="en_US.UTF-8"
 export EDITOR="vim"
@@ -19,6 +7,17 @@ export PATH=/usr/local/openresty/bin:$HOME/.cargo/bin:$HOME/.config/bin:$PATH
 export FZF_DEFAULT_OPTS='--height 80%'
 export XDG_CONFIG_HOME="$HOME/.config"
 export ARCHFLAGS="-arch x86_64"
+
+# go into window manager for tty1
+if [[ -z $DISPLAY ]] && [[ $(tty) = /dev/tty1 ]]; then
+	pgrep ssh-agent || eval $(ssh-agent)
+	exec sway
+fi
+
+if [ -f /etc/os-release ]; then
+	. /etc/os-release
+	OS=$NAME
+fi
 
 # Install zplug if not installed
 [ ! -d ~/.config/zplug ] \
@@ -118,6 +117,10 @@ alias pg='git push'
 alias gs='git status'
 alias gl='git log'
 alias gco='git checkout'
+# ez dirs
+alias wbc='cd ~/projects/ansible/ansible-webcore-compendium/'
+
+alias sshumount='fusermount3 -u'
 # Vi mode
 bindkey -v
 
@@ -150,3 +153,4 @@ if [[ -z "$TMUX" ]]; then
 	tmux set-environment -g SWAYSOCK /run/user/$(id -u)/sway-ipc.$(id -u).$(pgrep -x sway).sock
 fi
 
+source /usr/share/nvm/init-nvm.sh

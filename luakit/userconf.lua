@@ -6,6 +6,10 @@ local editor    = require "editor"
 local modes     = require "modes"
 local rofisel   = require "rofiselect"
 
+--globals.domain_props.all = {
+	--zoom_level = 1.5
+--}
+
 require "adblock"
 require "adblock_chrome"
 
