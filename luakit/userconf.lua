@@ -6,10 +6,6 @@ local editor    = require "editor"
 local modes     = require "modes"
 local rofisel   = require "rofiselect"
 
---globals.domain_props.all = {
-	--zoom_level = 1.5
---}
-
 require "adblock"
 require "adblock_chrome"
 
@@ -21,6 +17,7 @@ local engines = settings.window.search_engines
 engines.ddg = "https://duckduckgo.com/?q=%s"
 engines.aur = "https://aur.archlinux.org/packages.php?O=0&K=%s&do_Search=Go"
 engines.aw  = "https://wiki.archlinux.org/index.php/Special:Search?fulltext=Search&search=%s"
+engines.github = "https://github.com/search?q=%s"
 
 engines.default = engines.ddg
 -- }}}
