@@ -3,10 +3,10 @@ set $left h
 set $down j
 set $up k
 set $right l
-#set $swaylock 'swaylock -f -i ~/images/bluescreen.png'
 set $swaylock 'swaylock \
-	--screenshot --effect-blur 7x5 --clock --indicator --indicator-radius 100\
-	--ring-color 8ec07c'
+	--screenshot --effect-blur 7x5 --clock --indicator --indicator-radius 100 \
+	--ring-color 8ec07c -f'
+#set $swaylock '/usr/bin/lock'
 
 #xwayland enable
 
@@ -15,11 +15,13 @@ set $term 'alacritty'
 
 
 			     #border  │ bg       │  text   │  indicator │ child_border
-client.focused   #458488 #282828 #ffffff #fabd2f #d65d0e
-client.unfocused #282828 #282828 #000000 #282828 #282828
+client.focused   #BF616A    #BF616A    #ffffff   #BF616A      #A3BE8C
+client.unfocused #282828    #282828    #000000   #ea6962      #D08770
+client.focused_inactive #282828    #282828    #000000   #ea6962      #ea6962
 default_border pixel 2px
 
-font pango:Roboto Mono NerdFont normal 14px
+#font pango:Roboto Mono NerdFont normal 14px
+font pango: Source Code Pro normal 15px
 
 ## Spotify keybindings
 set $spotify dbus-send --print-reply --dest=org.mpris.MediaPlayer2.spotify \
@@ -36,12 +38,9 @@ bindsym $mod+shift+p exec $spotify_prev
 tiling_drag disable
 
 ### Output configuration
-output "*" bg /home/petter/images/touch-2560×1440.jpg fill
+#output "*" bg /home/petter/images/touch-2560×1440.jpg fill
 
-## work
-output eDP-1 res 1920x1080 pos 0,0
-output DP-4 res 1920x1080 pos -1920,0
-output DP-7 res 1920x1080 pos -3840,0
+#exec '/usr/bin/idle_toggle'
 
 exec swayidle -w \
 	timeout 300 $swaylock \
@@ -51,9 +50,10 @@ exec swayidle -w \
 	after-resume output * ~/downloads/touch-2560×1440.jpg fill
 
 input * {
-	xkb_layout no
-	xkb_variant ,nodeadkeys
-	xkb_options caps:escape
+	xkb_layout us,no
+	xkb_variant dvp,nodeadkeys
+	#xkb_options caps:swapescape
+	xkb_options ctrl:swapcaps
 }
 
 input 1386:789:Wacom_Intuos_Pro_M_Pen map_to_output DP-1
@@ -102,59 +102,55 @@ set $wsF10 'F10'
 set $wsF11 'F11'
 set $wsF12 'F12'
 
-# Goto
-bindsym $mod+1   workspace $ws1
-bindsym $mod+2   workspace $ws2
-bindsym $mod+3   workspace $ws3
-bindsym $mod+4   workspace $ws4
-bindsym $mod+5   workspace $ws5
-bindsym $mod+6   workspace $ws6
-bindsym $mod+7   workspace $ws7
-bindsym $mod+8   workspace $ws8
-bindsym $mod+9   workspace $ws9
-bindsym $mod+0   workspace $ws10
-bindsym $mod+F1  workspace $wsF1
-bindsym $mod+F2  workspace $wsF2
-bindsym $mod+F3  workspace $wsF3
-bindsym $mod+F4  workspace $wsF4
-bindsym $mod+F5  workspace $wsF5
-bindsym $mod+F6  workspace $wsF6
-bindsym $mod+F7  workspace $wsF7
-bindsym $mod+F8  workspace $wsF8
-bindsym $mod+F9  workspace $wsF9
-bindsym $mod+F10 workspace $wsF10
-bindsym $mod+F11 workspace $wsF11
-bindsym $mod+F12 workspace $wsF12
-# move to
-bindsym $mod+Shift+1 move container to workspace $ws1
-bindsym $mod+Shift+2 move container to workspace $ws2
-bindsym $mod+Shift+3 move container to workspace $ws3
-bindsym $mod+Shift+4 move container to workspace $ws4
-bindsym $mod+Shift+5 move container to workspace $ws5
-bindsym $mod+Shift+6 move container to workspace $ws6
-bindsym $mod+Shift+7 move container to workspace $ws7
-bindsym $mod+Shift+8 move container to workspace $ws8
-bindsym $mod+Shift+9 move container to workspace $ws9
-bindsym $mod+Shift+0 move container to workspace $ws10
-bindsym $mod+Shift+F1 move container to workspace $wsF1
-bindsym $mod+Shift+F2 move container to workspace $wsF2
-bindsym $mod+Shift+F3 move container to workspace $wsF3
-bindsym $mod+Shift+F4 move container to workspace $wsF4
-bindsym $mod+Shift+F5 move container to workspace $wsF5
-bindsym $mod+Shift+F6 move container to workspace $wsF6
-bindsym $mod+Shift+F7 move container to workspace $wsF7
-bindsym $mod+Shift+F8 move container to workspace $wsF8
-bindsym $mod+Shift+F9 move container to workspace $wsF9
-bindsym $mod+Shift+F10 move container to workspace $wsF10
-bindsym $mod+Shift+F11 move container to workspace $wsF11
-bindsym $mod+Shift+F12 move container to workspace $wsF12
+# Goto1
+# dvorak programmer
+bindsym $mod+parenleft    workspace $ws1
+bindsym $mod+parenright   workspace $ws2
+bindsym $mod+braceright   workspace $ws3
+bindsym $mod+plus         workspace $ws4
+bindsym $mod+braceleft    workspace $ws5
+bindsym $mod+bracketright workspace $ws6
+bindsym $mod+bracketleft  workspace $ws7
+bindsym $mod+exclam       workspace $ws8
+bindsym $mod+equal        workspace $ws9
+bindsym $mod+asterisk     workspace $ws10
 
-#workspace $ws1 output eDP-1
-#workspace $ws2 output HDMI-A-2
-#workspace $ws3 output DP-1
+bindsym $mod+Shift+parenleft    move container to workspace $ws1
+bindsym $mod+Shift+parenright   move container to workspace $ws2
+bindsym $mod+Shift+braceright   move container to workspace $ws3
+bindsym $mod+Shift+plus         move container to workspace $ws4
+bindsym $mod+Shift+braceleft    move container to workspace $ws5
+bindsym $mod+Shift+bracketright move container to workspace $ws6
+bindsym $mod+Shift+bracketleft  move container to workspace $ws7
+bindsym $mod+Shift+exclam       move container to workspace $ws8
+bindsym $mod+Shift+equal        move container to workspace $ws9
+bindsym $mod+Shift+asterisk     move container to workspace $ws10
+
+## qwerty
+#bindsym $mod+1   workspace $ws1
+#bindsym $mod+2   workspace $ws2
+#bindsym $mod+3   workspace $ws3
+#bindsym $mod+4   workspace $ws4
+#bindsym $mod+5   workspace $ws5
+#bindsym $mod+6   workspace $ws6
+#bindsym $mod+7   workspace $ws7
+#bindsym $mod+8   workspace $ws8
+#bindsym $mod+9   workspace $ws9
+#bindsym $mod+0   workspace $ws10
+
+#bindsym $mod+Shift+1 move container to workspace $ws1
+#bindsym $mod+Shift+2 move container to workspace $ws2
+#bindsym $mod+Shift+3 move container to workspace $ws3
+#bindsym $mod+Shift+4 move container to workspace $ws4
+#bindsym $mod+Shift+5 move container to workspace $ws5
+#bindsym $mod+Shift+6 move container to workspace $ws6
+#bindsym $mod+Shift+7 move container to workspace $ws7
+#bindsym $mod+Shift+8 move container to workspace $ws8
+#bindsym $mod+Shift+9 move container to workspace $ws9
+#bindsym $mod+Shift+0 move container to workspace $ws10
 
 for_window [app_id="floating"] floating enable
-for_window [class="Spotify"] move to workspace $ws10
+for_window [class="Spotify"] move to workspace $ws8
 
 # Layout stuff:
 bindsym $mod+g splith
@@ -205,21 +201,26 @@ mode "resize" {
 bindsym $mod+r mode "resize"
 
 bar {
-    position top
-	workspace_buttons true
-	font RobotoMono Nerd Font normal 15px
-	mode hide
+	swaybar_command waybar
+    #position top
+	#workspace_buttons true
+	##font RobotoMono Nerd Font normal 15px
+	#font Source Code Pro normal 15px
+	#mode hide
 
-	#swaybar_command /bin/bash ~/.config/sway/bashbar.sh
-	#status_command while ~/.config/sway/bashbar.sh; do sleep 1; done
-	status_command ~/.config/sway/luabar.lua
+	##swaybar_command /bin/bash ~/.config/sway/bashbar.sh
+	##status_command while ~/.config/sway/bashbar.sh; do sleep 1; done
+	#status_command ~/.config/sway/luabar.lua
 
-    colors {
-        statusline #ebdbb2
-        background #282828
-        inactive_workspace #665c54 #282828 #5c5c5c
-		focused_workspace  #d65d0e #665c54 #fbf1c7
-    }
+    #colors {
+        #statusline #ebdbb2
+        #background #282828
+        #inactive_workspace #665c54 #282828 #5c5c5c
+		#focused_workspace  #d65d0e #665c54 #fbf1c7
+    #}
 }
+
+#exec mako
+exec dunst
 
 include /etc/sway/config.d/*
