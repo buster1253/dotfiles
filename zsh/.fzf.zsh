@@ -12,6 +12,8 @@ fi
 # requirements
 # hightlight http://www.andre-simon.de/doku/highlight/en/highlight.php
 
+# it'd be nice to use -B 10 and highlight the maching line,
+# thus giving better insight to the preceding code.
 pv() {
 	if [ $# -eq 0 ]; then
 		return
@@ -22,9 +24,9 @@ pv() {
 		| fzf \
 			--delimiter=: \
 			--preview 'l={2};
-				highlight --force {1} -O ansi --line-range=$l-$(($l+40))' \
+				highlight --force {1} -O truecolor --style nord --line-range=$l-$(($l+40))' \
 			--height 100% \
-			--bind "enter:execute(vim {1} +{2} < /dev/tty)" \
+			--bind "enter:execute(nvim {1} +{2} < /dev/tty)" \
 }
 
 # Key bindings

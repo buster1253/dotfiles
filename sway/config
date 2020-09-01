@@ -15,13 +15,12 @@ set $term 'alacritty'
 
 
 			     #border  │ bg       │  text   │  indicator │ child_border
-client.focused   #BF616A    #BF616A    #ffffff   #BF616A      #A3BE8C
-client.unfocused #282828    #282828    #000000   #ea6962      #D08770
-client.focused_inactive #282828    #282828    #000000   #ea6962      #ea6962
+client.focused   #BF616A    #BF616A    #ffffff   #BF616A      #5E81AC
+client.unfocused #282828    #282828    #000000   #ea6962      #2E3440
+client.focused_inactive #282828    #282828    #000000   #ea6962      #2E3440
 default_border pixel 2px
 
-#font pango:Roboto Mono NerdFont normal 14px
-font pango: Source Code Pro normal 15px
+font pango:Roboto Mono NerdFont normal 14px
 
 ## Spotify keybindings
 set $spotify dbus-send --print-reply --dest=org.mpris.MediaPlayer2.spotify \
@@ -37,11 +36,6 @@ bindsym $mod+shift+p exec $spotify_prev
 ## various settings
 tiling_drag disable
 
-### Output configuration
-#output "*" bg /home/petter/images/touch-2560×1440.jpg fill
-
-#exec '/usr/bin/idle_toggle'
-
 exec swayidle -w \
 	timeout 300 $swaylock \
 	timeout 600 'swaymsg "output * dpms off"' \
@@ -52,11 +46,10 @@ exec swayidle -w \
 input * {
 	xkb_layout us,no
 	xkb_variant dvp,nodeadkeys
-	#xkb_options caps:swapescape
 	xkb_options ctrl:swapcaps
 }
 
-input 1386:789:Wacom_Intuos_Pro_M_Pen map_to_output DP-1
+#input 1386:789:Wacom_Intuos_Pro_M_Pen map_to_output DP-1
 #input 1386:789:Wacom_Intuos_Pro_M_Pen map_to_region 1920x1080@3840,1920
 
 

@@ -1,8 +1,11 @@
 au Syntax capnp runtime! syntax/capnp.vim
 au BufRead,BufNewFile *.capnp set filetype=capnp
+
 """""""""""""""""""
 "   Vim Settings  "
 """""""""""""""""""
+
+source $HOME/.config/nvim/configs/functions.vim
 
 " Plug {{{
 if has('nvim')
@@ -28,36 +31,50 @@ if has('nvim')
 else
 	call plug#begin('~/.vim/plugged')
 endif
-Plug 'scrooloose/nerdcommenter'        " quick commenting
 Plug 'junegunn/fzf.vim'                " some fzf commands for vim
-Plug 'vim-airline/vim-airline'         " Airline statusbar
-Plug 'vim-airline/vim-airline-themes'  " Airline themes
-Plug 'vim-syntastic/syntastic'         " Syntastic
+Plug 'scrooloose/nerdcommenter'        " quick commenting
 Plug 'airblade/vim-gitgutter'          " git line markings
 Plug 'tpope/vim-fugitive'              " git integration
 Plug 'vimwiki/vimwiki'                 " simple note taking
 Plug 'vim-pandoc/vim-pandoc'           " markdown pandoc
 Plug 'vim-pandoc/vim-pandoc-syntax'    " markdown pandoc syntax highlighting
 Plug 'dhruvasagar/vim-table-mode'      " markdown tables made EZ
-Plug 'chr4/nginx.vim'                  " nginx.conf
 Plug 'rhysd/vim-clang-format'          " autoformating for clang
-Plug 'morhetz/gruvbox'                 " gruvbox theme
-Plug 'rust-lang/rust.vim'              " rust tools
-Plug 'Dimercel/todo-vim'               " todo list
-Plug 'abudden/taghighlight-automirror' " highlight custom c defines/functions
 Plug 'christoomey/vim-tmux-navigator'  " tmux integration
 Plug 'gsiano/vmux-clipboard'           " yank to tmux clipboard
 Plug 'edkolev/tmuxline.vim'
-Plug 'stephpy/vim-yaml'
 Plug 'majutsushi/tagbar'
-Plug 'Glench/Vim-Jinja2-Syntax'
 Plug 'raghur/mermaid-filter'
 Plug 'iamcco/markdown-preview.nvim', { 'do': { -> mkdp#util#install() } }
-"Plug 'vim-utils/vim-man'
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
+Plug 'junegunn/vim-easy-align' " languages
+Plug 'sheerun/vim-polyglot'
+Plug 'chr4/nginx.vim'                  " nginx.conf
+Plug 'rust-lang/rust.vim'              " rust tools
+Plug 'Glench/Vim-Jinja2-Syntax'
+Plug 'stephpy/vim-yaml'
+Plug 'neovimhaskell/haskell-vim'
+Plug 'ziglang/zig.vim' " looks
+Plug 'morhetz/gruvbox'                 " gruvbox theme
+Plug 'abudden/taghighlight-automirror' " highlight custom c defines/functions
+Plug 'itchyny/lightline.vim'
+Plug 'mattn/emmet-vim'
+Plug 'sainnhe/gruvbox-material'
+Plug 'liuchengxu/vista.vim'
+Plug 'dylanaraps/wal.vim'
+Plug 'mzlogin/vim-markdown-toc'
+Plug 'Kogia-sima/sailfish', {'rtp': 'syntax/vim'}
+Plug 'arcticicestudio/nord-vim'
+Plug 'jackguo380/vim-lsp-cxx-highlight'
+Plug 'chriskempson/base16-vim'
+Plug 'lervag/vimtex'
 call plug#end()
 " }}}
 
-" set filetype for 'config' files TODO move this somewhere
+set exrc             " source local vimrc files automatically
+set secure           " reduce risk from sourcing local vimrc files
+
+" set filetype for 'config' files
 au BufRead config set filetype=config
 
 " get some folding going
@@ -68,7 +85,8 @@ augroup end
 
 augroup tt2
 	autocmd!
-	autocmd FileType tt2 setlocal filetype=html
+	au BufRead,BufNewFile *.tt2 set filetype=html
+	au FileType html set sw=2
 augroup end
 
 augroup service
@@ -78,7 +96,7 @@ augroup end
 
 
 " remove inserted space from abbreviations <C-R>Eatchar()<CR>
-func! Eatchar(pat)
+func Eatchar(pat)
 	let c = nr2char(getchar(0))
 	return (c =~ a:pat) ? '' : c
 endfunc
@@ -94,45 +112,46 @@ function! Nginx_abbr()
 	abbr abl access_by_lua_block<space>{<cr>}<esc>O
 endfunction
 
-augroup lua_file
-	autocmd!
-	autocmd FileType lua call Lua_abbr()
-augroup end
-
-function! Lua_abbr()
-	abbr fun function()<cr>end<esc>?(<cr>:noh<cr>i
-	abbr mfun _M.=<space>function()<cr>end<esc>?=<cr>:noh<CR><C-R>Eatchar('\s')
-	"abbr if if then<CR>end<ESC>ki
-	abbr nloge ngx.log(ngx.ERR,
-endfunction
-
-syntax on
+" Theme {{{
+syntax enable
 filetype plugin on
 set nocompatible
 set termguicolors
+"
+" Vista tagbar
+function! NearestMethodOrFunction() abort
+  return get(b:, 'vista_nearest_method_or_function', '')
+endfunction
 
-set timeoutlen=1000 ttimeoutlen=0
+colorscheme nord
+let g:lightline = {
+	\ 'colorscheme': 'nord',
+	\ 'active': {
+	\   'left': [ [ 'mode', 'paste' ],
+	\             [ 'readonly', 'filename', 'modified', 'gitbranch', 'method' ] ]
+	\ },
+	\ 'component_function': {
+	\		'gitbranch': 'FugitiveHead',
+	\		'method': 'NearestMethodOrFunction'
+	\ },
+\ }
+let g:tmuxline_powerline_separators = 0
+let g:tmuxline_preset = 'full'
+let g:airline#extensions#tmuxline#enabled = 0
+let g:tmuxline_theme = {
+	\   'a'    : [ 121, 239 ],
+    \   'b'    : [ 121, 240 ],
+    \   'c'    : [ 121, 236 ],
+    \   'x'    : [ 121, 236 ],
+    \   'y'    : [ 121, 239 ],
+    \   'z'    : [ 121, 103 ],
+    \   'win'  : [ 121, 236 ],
+    \   'cwin' : [ 121, 103 ],
+    \   'bg'   : [ 121, 236 ],
+\ }
 
-
-" Syntastic ------------------- {{{
-set statusline+=%#warningmsg#
-set statusline+=%{SyntasticStatuslineFlag()}
-set statusline+=%*
-
-let g:syntastic_always_populate_loc_list = 1
-let g:syntastic_auto_loc_list = 0
-let g:syntastic_check_on_open = 1
-let g:syntastic_check_on_wq = 1
-let g:syntastic_enable_signs = 1
-
-" Lua
-let g:syntastic_lua_checkers = ["luacheck"]
-let g:syntastic_lua_luacheck_args = "--std ngx_lua --ignore '4[123]1/err' --ignore '4[123]1/data'"
-let g:syntastic_check_on_open = 1
-
-
-"let g:syntastic_rust_checkers = ['rustc']
 " }}}
+
 
 " general settings {{{
 let mapleader = ","
@@ -156,9 +175,7 @@ set incsearch
 set splitbelow
 set splitright
 
-set guioptions=+a
 set clipboard+=unnamed
-"set clipboard=unnamed
 
 set wildmenu
 set wildmode=longest,list,full
@@ -169,24 +186,25 @@ set showcmd      " show command in bottom bar
 set showmatch    " hightlight matching [{()}]"
 set scrolloff=3  " keep 3 lines above and below cursor
 
+set timeoutlen=1000 ttimeoutlen=0
+
+set hidden
+set updatetime=300
+set signcolumn=yes
+
+" Netrw
+let g:netrw_banner = 0
+let g:netrw_browse_split = 1
+let g:netrw_liststyle = 3
+
 "}}}
 
-" Theme {{{
-colorscheme gruvbox
-let g:gruvbox_bold=1
-let g:gruvbox_italic=1
-let g:gruvbox_contrast_dark='hard'
-set background=dark
-
-" Airline settings
-let g:airline_theme='gruvbox'
-let g:airline_powerline_fonts = 1
-"}}}
-
+let g:lsp_cxx_hl_use_text_props = 1
 
 "let g:pandoc#formatting#textwidth = 80
 "let g:pandoc#command#autoexec_on_writes = 1
 let g:pandoc#command#autoexec_command = 'Pandoc! -F mermaid-filter pdf'
+let g:pandoc#syntax#codeblocks#embeds#langs = ['lua', 'c', 'nginx', 'dot', 'typescript', 'php', 'sql', 'javascript', 'rust']
 
 " vim/nvim specific settings {{{
 if has('nvim')
@@ -201,26 +219,8 @@ endif
 "}}}
 let g:rust_use_custom_ctags_defs = 1  "ignore https://github.com/rust-lang/rust.vim/blob/master/ctags/rust.ctags
 
-if !exists('g:tagbar_type_rust')
-   let g:tagbar_type_rust = {
-       \ 'ctagstype' : 'rust',
-       \ 'kinds' : [
-         \'M:macro,Macro Definition',
-         \'P:method,A method',
-         \'c:implementation,implementation',
-         \'e:enumerator,An enum variant',
-         \'f:function,Function',
-         \'g:enum,Enum',
-         \'i:interface,trait interface',
-         \'m:field,A struct field',
-         \'n:module,module',
-         \'s:struct,structural type',
-         \'t:typedef,Type Alias',
-         \'v:variable,Global variable',
-       \ ]
-   \ }
-endif
-
+xmap ga <Plug>(EasyAlign)
+nmap ga <Plug>(EasyAlign)
 
 let g:vimwiki_list = [
 	\ {'path':'~/.config/vimwiki/',
@@ -239,28 +239,21 @@ let g:fzf_action = {
 au BufReadPost * if line("'\"") > 0 && line("'\"") <= line("$")
 	\| exe "normal! g'\""
 
+let g:termdebug_wide=1
 
 " helpful lines
-set colorcolumn=81
+set textwidth=120
+let &colorcolumn=join(range(121,121),',')
 set cursorline cursorcolumn
 hi Comment cterm=italic
-hi ColorColumn  guibg=#b8bb26
-hi CursorLine   guibg=#3C3836
-hi CursorColumn guibg=#3C3836
-hi NonText      guibg=NONE guifg=#689d6a
-hi SpecialKey   guibg=NONE guifg=#689d6a
-
-" Restore from fullscreen mode, and restore previously closed sessions {{{
-nnoremap <C-w>z :mksession! ~/session.vim<CR>
-nnoremap <C-w>o :mksession! ~/session.vim<CR>:wincmd o<CR>
-nnoremap <C-w>u :source ~/session.vim<CR>
-" TODO make fzf session searcher
 
 " }}}
 
 " Display incorrect space and tab usage {{{
-nnoremap <Leader>l :set list! listchars=tab:>\ ,trail:· <CR>
-hi ExtraWhitespace guibg=red
+nnoremap <Leader>l :set list! listchars=tab:│\ ,trail:· <CR>
+"nnoremap <Leader>l :set list! listchars=trail:· <CR>
+"set list! listchars=tab:│\ ,trail:·
+hi link ExtraWhitespace DiffDelete
 match ExtraWhitespace /\s\+$/
 autocmd BufWinEnter * match ExtraWhitespace /\s\+$/
 autocmd InsertEnter * match ExtraWhitespace /\s\+\%#\@<!$/
@@ -269,32 +262,92 @@ autocmd BufWinLeave * call clearmatches()
 " }}}
 
 " keybindings {{{
+
+" coc {{{
+map <leader>cd <Plug>(coc-definition)
+map <leader>ct <Plug>(coc-type-definition)
+map <leader>ci <Plug>(coc-implementation)
+map <leader>cr <Plug>(coc-references)
+nmap <leader>rn <Plug>(coc-rename)
+" Use K to show documentation in preview window.
+nnoremap <silent> sd :call <SID>show_documentation()<CR>
+inoremap <silent><expr> <c-space> coc#refresh()
+
+function! s:show_documentation()
+  if (index(['vim','help'], &filetype) >= 0)
+    execute 'h '.expand('<cword>')
+  else
+    call CocAction('doHover')
+  endif
+endfunction
+" }}}
+
 nnoremap N Nzz
 nnoremap n nzz
 
-nnoremap <F5> :TODOToggle <CR>
 "open fzf buffers
 nnoremap <C-b> :Buffers<CR>
-
-"vnoremap " <esc><esc>`<i"<esc>`>la"<esc>
 
 nnoremap - ddkP
 nnoremap _ ddp
 
+nnoremap <leader>t :Vista!!<cr>
+
 nnoremap <leader>ev :vsplit $MYVIMRC<cr>
 nnoremap <leader>sv :source $MYVIMRC<cr>
+
+" lazygit toggle
+"nnoremap <silent> <Leader>lg :call ToggleLazyGit()<CR>
+
+"Ctrl-dir in all modes
+tnoremap <C-h> <C-\><C-N><C-w>h
+tnoremap <C-j> <C-\><C-N><C-w>j
+tnoremap <C-k> <C-\><C-N><C-w>k
+tnoremap <C-l> <C-\><C-N><C-w>l
+inoremap <C-h> <C-\><C-N><C-w>h
+inoremap <C-j> <C-\><C-N><C-w>j
+inoremap <C-k> <C-\><C-N><C-w>k
+inoremap <C-l> <C-\><C-N><C-w>l
+nnoremap <C-h> <C-w>h
+nnoremap <C-j> <C-w>j
+nnoremap <C-k> <C-w>k
+nnoremap <C-l> <C-w>l
+
+" term mode
+tnoremap <C-e> <C-\><C-n>
 
 " unmap ex-mode
 nmap Q  <NOP>
 nmap gQ <NOP>
+
+" synctex
+function! Synctex()
+	 let vimura_param = " --synctex-forward " . line('.') . ":" . col('.') . ":" . expand('%:p') . " " . substitute(expand('%:p'),"tex$","pdf", "")
+    if has('nvim')
+        call jobstart("vimura neovim" . vimura_param)
+    else
+        exe "silent !vimura vim" . vimura_param . "&"
+    endif
+    redraw!
+endfunction
+nmap <C-enter> :call Synctex()<cr>
+
 "}}}
 
 augroup markdown
 	au!
-	au FileType,BufEnter,FileReadPost vimwiki,*.md set filetype=pandoc
+	au FileType,BufEnter,FileReadPost vimwiki,*.md set filetype=mdown
 augroup end
-
-map <leader>k <Plug>(Man)
 
 let g:mkdp_auto_close = 1
 let g:mkdp_auto_start = 0
+let g:mkdp_open_to_world = 0
+let g:mkdp_browser = ''
+let g:mkdp_port = 8080
+
+map <leader>k <Plug>(Man)
+
+nmap <leader>p :w!<CR>:w!/tmp/vim-markdown.md<CR>:!pandoc -s --lua-filter=/home/petter/playground/pandoc_filter.lua --css file:///home/petter/downloads/github-markdown.css -f markdown -t html -o /tmp/vim-markdown.html /tmp/vim-markdown.md<CR>:!luakit /tmp/vim-markdown.html > /dev/null 2> /dev/null&<CR><CR>
+
+
+let g:tex_flavor = 'latex'

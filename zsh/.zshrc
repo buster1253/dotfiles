@@ -1,6 +1,6 @@
 export ZPLUG_HOME=$HOME/.config/zplug
 export LANG="en_US.UTF-8"
-export EDITOR="vim"
+export EDITOR="nvim"
 export TERMINAL="alacritty"
 export MYVIMRC=$HOME/.config/vimrc
 export PATH=/usr/local/openresty/bin:$HOME/.cargo/bin:$HOME/.config/bin:$PATH
@@ -8,10 +8,16 @@ export FZF_DEFAULT_OPTS='--height 80%'
 export XDG_CONFIG_HOME="$HOME/.config"
 export ARCHFLAGS="-arch x86_64"
 
+export VISUAL="$EDITOR" # git-issue: https://github.com/dspinellis/git-issue
+
 # go into window manager for tty1
 if [[ -z $DISPLAY ]] && [[ $(tty) = /dev/tty1 ]]; then
-	pgrep ssh-agent || eval $(ssh-agent)
-	exec sway
+	SSH_AGENT=$(pgrep ssh-agent)
+	if [ -n "$SSH_AGENT" ]; then
+		kill "$SSH_AGENT"
+	fi
+	eval $(ssh-agent)
+	WLR_DRM_NO_MODIFIERS=1 exec sway
 fi
 
 if [ -f /etc/os-release ]; then
@@ -29,6 +35,7 @@ zplug "plugins/colored-man-pages", from:oh-my-zsh
 zplug "plugins/colorize", from:oh-my-zsh
 zplug "zsh-users/zsh-syntax-highlighting", defer:2
 zplug load
+setopt monitor
 
 ZLE_RPROMPT_INDENT=0
 HISTFILE=$HOME/.config/zsh/.zsh_history
@@ -48,8 +55,13 @@ if [ "$OS" = "Arch Linux" ]; then
 fi
 
 
+#function powerline_precmd() {
+	#PS1="$($XDG_CONFIG_HOME/powerline-rs/target/release/powerline-rs)"
+#}
 function powerline_precmd() {
-	PS1="$($XDG_CONFIG_HOME/powerline-rs/target/debug/powerline-rs)"
+	j=$(jobs | wc -l)
+	#PS1=$(/home/petter/playground/rust/powerline-rs/target/debug/powerline-rs $j)
+	PS1=$($HOME/playground/rust/prompt-rs/target/debug/powerline-rs $j)
 }
 precmd_functions+=(powerline_precmd)
 
@@ -103,8 +115,8 @@ CASE_SENSITIVE="true"
 
 alias vi='vim'
 alias vim='nvim'
-alias ls='ls --color=auto'
-alias ll='ls -lh'
+#alias ls='ls --color=auto'
+#alias ll='ls -lh'
 alias pac='sudo pacman'
 alias lua='rlwrap luajit'
 alias pdf='zathura'
@@ -118,11 +130,21 @@ alias gs='git status'
 alias gl='git log'
 alias gco='git checkout'
 # ez dirs
-alias wbc='cd ~/projects/ansible/ansible-webcore-compendium/'
+alias awc='cd ~/projects/webcore/ansible-webcore-compendium/'
+alias cp='cp'
+
+# test things
+alias cat='bat --theme Nord'
+alias ls='exa'
+alias ll='exa -al'
+
+alias cpy='wl-copy -p'
 
 alias sshumount='fusermount3 -u'
 # Vi mode
 bindkey -v
+bindkey '^P' up-line-or-history
+bindkey '^N' down-line-or-history
 
 # viman() { text=$(man "$@") && echo "$text" | vim -R +":set ft=man" - ; }
 # quick search
@@ -143,14 +165,10 @@ fg() {
 
 [ -f ~/.config/zsh/.fzf.zsh ] && source ~/.config/zsh/.fzf.zsh
 
-#if [[ $TERM == xterm-termite ]]; then
-  #. /etc/profile.d/vte.sh
-  #__vte_osc7
-#fi
 
+export SWAYSOCK=/run/user/$(id -u)/sway-ipc.$(id -u).$(pgrep -x sway).sock
 if [[ -z "$TMUX" ]]; then
 	tmux -2
-	tmux set-environment -g SWAYSOCK /run/user/$(id -u)/sway-ipc.$(id -u).$(pgrep -x sway).sock
 fi
 
 if [ -f /usr/share/nvm/init-nvm.sh ]; then

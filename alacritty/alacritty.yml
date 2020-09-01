@@ -14,16 +14,12 @@ window:
 
 scrolling:
   history: 10000
-  multiplier: 2
-  faux_multiplier: 3
-  auto_scroll: false
-
-tabspaces: 4
+  multiplier: 1
 
 font:
   normal:
     family: RobotoMono Nerd Font
-    style: Regular
+    style: normal
 
   bold:
     family: RobotoMono Nerd Font
@@ -33,8 +29,7 @@ font:
     family: RobotoMono Nerd Font
     style: Italic
 
-  #size: 8.0
-  size: 14.0
+  size: 9.0
 
   offset:
     x: 0
@@ -49,42 +44,38 @@ font:
 
 draw_bold_text_with_bright_colors: true
 
-colors:
-  primary:
-    # hard contrast: background = '0x1d2021'
-    background: '0x1d2021'
-    # soft contrast: background = '0x32302f'
-    foreground: '0xebdbb2'
-
-  # Normal colors
-  normal:
-    black:   '0x282828'
-    red:     '0xcc241d'
-    green:   '0x98971a'
-    yellow:  '0xd79921'
-    blue:    '0x458588'
-    magenta: '0xb16286'
-    cyan:    '0x689d6a'
-    white:   '0xa89984'
-
-  # Bright colors
-  bright:
-    black:   '0x928374'
-    red:     '0xfb4934'
-    green:   '0xb8bb26'
-    yellow:  '0xfabd2f'
-    blue:    '0x83a598'
-    magenta: '0xd3869b'
-    cyan:    '0x8ec07c'
-    white:   '0xebdbb2'
-
-  #cursor:
-  #  text: '0x000000'
-  #  cursor: '0xffffff'
+schemes:
+  nord: &nord
+    primary:
+      background: '0x2E3440'
+      foreground: '0xD8DEE9'
+    cursor:
+      text: '0x2E3440'
+      cursor: '0xD8DEE9'
+    normal:
+      black: '0x3B4252'
+      red: '0xBF616A'
+      green: '0xA3BE8C'
+      yellow: '0xEBCB8B'
+      blue: '0x81A1C1'
+      magenta: '0xB48EAD'
+      cyan: '0x88C0D0'
+      white: '0xE5E9F0'
+    bright:
+      black: '0x4C566A'
+      red: '0xBF616A'
+      green: '0xA3BE8C'
+      yellow: '0xEBCB8B'
+      blue: '0x81A1C1'
+      magenta: '0xB48EAD'
+      cyan: '0x8FBCBB'
+      white: '0xECEFF4'
 
   indexed_colors: []
 
-visual_bell:
+colors: *nord
+
+bell:
   animation: EaseOutExpo
   duration: 0
   color: '0xffffff'
@@ -112,7 +103,7 @@ selection:
   save_to_clipboard: false
 
 # Allow terminal applications to change Alacritty's window title.
-dynamic_title: true
+window.dynamic_title: true
 
 cursor:
   #   - ▇ Block
@@ -318,3 +309,4 @@ key_bindings:
   - { key: NumpadEnter,             chars: "\n"                              }
   - { key: Back,     mods: Control, chars: ""                                }
   - { key: Space,    mods: Alt,     chars: " "                               }
+  - { key: Minus,    mods: Control, chars: ""                 }

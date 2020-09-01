@@ -1,27 +1,13 @@
-# Config
-## Installing zsh
-1. Install zsh via pacman
-2. Edit ~/.zshenv:
-```Bash
-ZDOTDIR=/path/to/where/you/want/.zshrc
-```
-1. Move config files
-2. Enjoy
+This readme is outdated.
 
+### ZSH
+edit `~/.zshenv` and set `ZDOTDIT` so that it points to zshrc
 
 ### Keymap
-```
-~/.xinitrc
-[[ -f ~/path/to/key_map ]] && xmodmap ~/path/to/key_map
-```
 
-## Pandoc
-[Pandoc Bin](https://aur.archlinux.org/packages/pandoc-bin/)  
-`pacman -S texlive-core`
+sway enables setting keymap within the config. If you dont want to map caps to
+ctrl then remove `xkb_options ctrl:swapcaps` from the config.
 
+# TODO
 
-### Shit I might forget to install:
-* shellcheck(pacman) - Ale Bash linter
-* Download and install [fzf](https://github.com/junegunn/fzf)
-  * Move .fzf.zsh into ~/.config/zsh/ | Change to $ZDOTDIR?
-
+- [ ] Install: Configure dnsmasq(or alternate DNS service)
