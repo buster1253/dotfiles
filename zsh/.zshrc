@@ -3,10 +3,23 @@ export LANG="en_US.UTF-8"
 export EDITOR="nvim"
 export TERMINAL="alacritty"
 export MYVIMRC=$HOME/.config/vimrc
-export PATH=/usr/local/openresty/bin:$HOME/.cargo/bin:$HOME/.config/bin:$PATH
 export FZF_DEFAULT_OPTS='--height 80%'
 export XDG_CONFIG_HOME="$HOME/.config"
 export ARCHFLAGS="-arch x86_64"
+export NVIM_LISTEN_ADDRESS=/tmp/nvimsocket
+export WAYLAND_DISPLAY=wayland-1
+export MOZ_ENABLE_WAYLAND=1
+
+# Path
+PATH=$HOME/.cargo/bin:$PATH              # cargo
+PATH=$HOME/.config/bin:$PATH             # quality of life scripts
+if [ -d /opt/cuda/bin ]; then
+	PATH=/opt/cuda/bin:$PATH             # cuda
+fi
+if [ -d /usr/local/openresty/bin ]; then # openresty
+	PATH=/usr/local/openresty/bin:$PATH
+fi
+export PATH=$PATH
 
 export VISUAL="$EDITOR" # git-issue: https://github.com/dspinellis/git-issue
 
@@ -17,6 +30,7 @@ if [[ -z $DISPLAY ]] && [[ $(tty) = /dev/tty1 ]]; then
 		kill "$SSH_AGENT"
 	fi
 	eval $(ssh-agent)
+	unset WAYLAND_DISPLAY
 	WLR_DRM_NO_MODIFIERS=1 exec sway
 fi
 
@@ -29,6 +43,9 @@ fi
 [ ! -d ~/.config/zplug ] \
 	&& git clone https://github.com/zplug/zplug ~/.config/zplug
 source ~/.config/zplug/init.zsh
+
+autoload -Uz comipnit
+compinit
 
 zplug 'zplug/zplug', hook-build:'zplug --self-manage'
 zplug "plugins/colored-man-pages", from:oh-my-zsh
@@ -50,18 +67,13 @@ export KEYTIMEOUT=1
 # Tab completion menu
 zstyle ':completion:*' menu select
 
-if [ "$OS" = "Arch Linux" ]; then
-	source /usr/share/doc/pkgfile/command-not-found.zsh
-fi
+#if [ "$OS" = "Arch Linux" ]; then
+	#source /usr/share/doc/pkgfile/command-not-found.zsh
+#fi
 
 
-#function powerline_precmd() {
-	#PS1="$($XDG_CONFIG_HOME/powerline-rs/target/release/powerline-rs)"
-#}
 function powerline_precmd() {
-	j=$(jobs | wc -l)
-	#PS1=$(/home/petter/playground/rust/powerline-rs/target/debug/powerline-rs $j)
-	PS1=$($HOME/playground/rust/prompt-rs/target/debug/powerline-rs $j)
+	PS1=$($HOME/playground/rust/prompt-rs/target/release/powerline-rs)
 }
 precmd_functions+=(powerline_precmd)
 
@@ -112,9 +124,15 @@ CASE_SENSITIVE="true"
 
 # ssh
 # export SSH_KEY_PATH="~/.ssh/rsa_id"
+#
+## GPG (remember to add `use-agent` to gpg.conf)
+export GPG_TTY=$(tty)
+gpgconf --launch gpg-agent
 
+## Aliases
 alias vi='vim'
 alias vim='nvim'
+alias nvim='nvim'
 #alias ls='ls --color=auto'
 #alias ll='ls -lh'
 alias pac='sudo pacman'
@@ -131,16 +149,13 @@ alias gl='git log'
 alias gco='git checkout'
 # ez dirs
 alias awc='cd ~/projects/webcore/ansible-webcore-compendium/'
-alias cp='cp'
-
-# test things
+#
 alias cat='bat --theme Nord'
 alias ls='exa'
 alias ll='exa -al'
-
 alias cpy='wl-copy -p'
-
 alias sshumount='fusermount3 -u'
+
 # Vi mode
 bindkey -v
 bindkey '^P' up-line-or-history
