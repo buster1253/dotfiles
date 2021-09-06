@@ -1,6 +1,3 @@
-au Syntax capnp runtime! syntax/capnp.vim
-au BufRead,BufNewFile *.capnp set filetype=capnp
-
 """""""""""""""""""
 "   Vim Settings  "
 """""""""""""""""""
@@ -39,40 +36,41 @@ Plug 'vimwiki/vimwiki'                 " simple note taking
 Plug 'vim-pandoc/vim-pandoc'           " markdown pandoc
 Plug 'vim-pandoc/vim-pandoc-syntax'    " markdown pandoc syntax highlighting
 Plug 'dhruvasagar/vim-table-mode'      " markdown tables made EZ
-Plug 'rhysd/vim-clang-format'          " autoformating for clang
 Plug 'christoomey/vim-tmux-navigator'  " tmux integration
 Plug 'gsiano/vmux-clipboard'           " yank to tmux clipboard
 Plug 'edkolev/tmuxline.vim'
 Plug 'majutsushi/tagbar'
 Plug 'raghur/mermaid-filter'
 Plug 'iamcco/markdown-preview.nvim', { 'do': { -> mkdp#util#install() } }
-Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'junegunn/vim-easy-align' " languages
 Plug 'sheerun/vim-polyglot'
 Plug 'chr4/nginx.vim'                  " nginx.conf
 Plug 'rust-lang/rust.vim'              " rust tools
 Plug 'Glench/Vim-Jinja2-Syntax'
 Plug 'stephpy/vim-yaml'
-Plug 'neovimhaskell/haskell-vim'
-Plug 'ziglang/zig.vim' " looks
 Plug 'morhetz/gruvbox'                 " gruvbox theme
-Plug 'abudden/taghighlight-automirror' " highlight custom c defines/functions
 Plug 'itchyny/lightline.vim'
 Plug 'mattn/emmet-vim'
 Plug 'sainnhe/gruvbox-material'
 Plug 'liuchengxu/vista.vim'
-Plug 'dylanaraps/wal.vim'
 Plug 'mzlogin/vim-markdown-toc'
 Plug 'Kogia-sima/sailfish', {'rtp': 'syntax/vim'}
-Plug 'arcticicestudio/nord-vim'
-Plug 'jackguo380/vim-lsp-cxx-highlight'
-Plug 'chriskempson/base16-vim'
+Plug 'hrsh7th/nvim-compe'
 Plug 'lervag/vimtex'
+Plug 'lambdalisue/suda.vim'
+
+Plug 'neovim/nvim-lspconfig'
+Plug 'nvim-lua/completion-nvim'
+
+Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
+Plug 'heavenshell/vim-jsdoc', {
+  \ 'for': ['javascript', 'javascript.jsx','typescript'],
+  \ 'do': 'make install'
+\}
+
 call plug#end()
 " }}}
 
-set exrc             " source local vimrc files automatically
-set secure           " reduce risk from sourcing local vimrc files
 
 " set filetype for 'config' files
 au BufRead config set filetype=config
@@ -95,37 +93,35 @@ augroup service
 augroup end
 
 
-" remove inserted space from abbreviations <C-R>Eatchar()<CR>
-func Eatchar(pat)
-	let c = nr2char(getchar(0))
-	return (c =~ a:pat) ? '' : c
-endfunc
-
 " alternatively start using ~/.vim/ftdetect/ft.vim
 augroup nginx_conf
 	autocmd!
 	autocmd FileType nginx call Nginx_abbr()
 augroup end
 
-function! Nginx_abbr()
-	abbr cbl content_by_lua_block<space>{<cr>}<esc>O
-	abbr abl access_by_lua_block<space>{<cr>}<esc>O
-endfunction
+au Syntax capnp runtime! syntax/capnp.vim
+au BufRead,BufNewFile *.capnp set filetype=capnp
+
+augroup markdown
+	au!
+	au FileType,BufEnter,FileReadPost vimwiki,*.md set filetype=mdown
+augroup end
 
 " Theme {{{
 syntax enable
 filetype plugin on
 set nocompatible
 set termguicolors
-"
+
 " Vista tagbar
 function! NearestMethodOrFunction() abort
   return get(b:, 'vista_nearest_method_or_function', '')
 endfunction
 
-colorscheme nord
+"set background=dark
+colorscheme gruvbox
 let g:lightline = {
-	\ 'colorscheme': 'nord',
+	\ 'colorscheme': 'gruvbox',
 	\ 'active': {
 	\   'left': [ [ 'mode', 'paste' ],
 	\             [ 'readonly', 'filename', 'modified', 'gitbranch', 'method' ] ]
@@ -165,7 +161,9 @@ set softtabstop=4
 set shiftwidth=4
 set shiftround
 
-set completeopt=menu
+"set completeopt=menuone,noinsert,noselect
+set completeopt=menuone,noselect
+set shortmess+=c
 set autoindent
 set backspace=indent,eol,start
 
@@ -177,6 +175,19 @@ set splitright
 
 set clipboard+=unnamed
 
+let g:clipboard = {
+            \'name': 'waylandCliboard',
+            \ 'copy': {
+            \	'+': 'wl-copy -p',
+            \	'*': 'wl-copy -p',
+            \},
+            \ 'paste': {
+            \	'+': 'wl-paste -p -n',
+            \	'*': 'wl-paste -p -n',
+            \},
+            \'cache_enabled': 1,
+            \}
+
 set wildmenu
 set wildmode=longest,list,full
 set relativenumber
@@ -187,6 +198,9 @@ set showmatch    " hightlight matching [{()}]"
 set scrolloff=3  " keep 3 lines above and below cursor
 
 set timeoutlen=1000 ttimeoutlen=0
+
+set exrc             " source local vimrc files automatically
+set secure           " reduce risk from sourcing local vimrc files
 
 set hidden
 set updatetime=300
@@ -217,6 +231,7 @@ else
 	set t_Co=256
 endif
 "}}}
+
 let g:rust_use_custom_ctags_defs = 1  "ignore https://github.com/rust-lang/rust.vim/blob/master/ctags/rust.ctags
 
 xmap ga <Plug>(EasyAlign)
@@ -242,8 +257,8 @@ au BufReadPost * if line("'\"") > 0 && line("'\"") <= line("$")
 let g:termdebug_wide=1
 
 " helpful lines
-set textwidth=120
-let &colorcolumn=join(range(121,121),',')
+set textwidth=100
+let &colorcolumn=join(range(101,101),',')
 set cursorline cursorcolumn
 hi Comment cterm=italic
 
@@ -263,55 +278,22 @@ autocmd BufWinLeave * call clearmatches()
 
 " keybindings {{{
 
-" coc {{{
-map <leader>cd <Plug>(coc-definition)
-map <leader>ct <Plug>(coc-type-definition)
-map <leader>ci <Plug>(coc-implementation)
-map <leader>cr <Plug>(coc-references)
-nmap <leader>rn <Plug>(coc-rename)
-" Use K to show documentation in preview window.
-nnoremap <silent> sd :call <SID>show_documentation()<CR>
-inoremap <silent><expr> <c-space> coc#refresh()
-
-function! s:show_documentation()
-  if (index(['vim','help'], &filetype) >= 0)
-    execute 'h '.expand('<cword>')
-  else
-    call CocAction('doHover')
-  endif
-endfunction
-" }}}
-
 nnoremap N Nzz
 nnoremap n nzz
-
-"open fzf buffers
-nnoremap <C-b> :Buffers<CR>
 
 nnoremap - ddkP
 nnoremap _ ddp
 
 nnoremap <leader>t :Vista!!<cr>
 
-nnoremap <leader>ev :vsplit $MYVIMRC<cr>
-nnoremap <leader>sv :source $MYVIMRC<cr>
+" easy source and edit config
+"nnoremap <leader>ev :vsplit $MYVIMRC<cr>
+"nnoremap <leader>sv :source $MYVIMRC<cr>
 
 " lazygit toggle
 "nnoremap <silent> <Leader>lg :call ToggleLazyGit()<CR>
 
-"Ctrl-dir in all modes
-tnoremap <C-h> <C-\><C-N><C-w>h
-tnoremap <C-j> <C-\><C-N><C-w>j
-tnoremap <C-k> <C-\><C-N><C-w>k
-tnoremap <C-l> <C-\><C-N><C-w>l
-inoremap <C-h> <C-\><C-N><C-w>h
-inoremap <C-j> <C-\><C-N><C-w>j
-inoremap <C-k> <C-\><C-N><C-w>k
-inoremap <C-l> <C-\><C-N><C-w>l
-nnoremap <C-h> <C-w>h
-nnoremap <C-j> <C-w>j
-nnoremap <C-k> <C-w>k
-nnoremap <C-l> <C-w>l
+nnoremap <leader>b :Buffers<CR>
 
 " term mode
 tnoremap <C-e> <C-\><C-n>
@@ -334,10 +316,6 @@ nmap <C-enter> :call Synctex()<cr>
 
 "}}}
 
-augroup markdown
-	au!
-	au FileType,BufEnter,FileReadPost vimwiki,*.md set filetype=mdown
-augroup end
 
 let g:mkdp_auto_close = 1
 let g:mkdp_auto_start = 0
@@ -349,5 +327,31 @@ map <leader>k <Plug>(Man)
 
 nmap <leader>p :w!<CR>:w!/tmp/vim-markdown.md<CR>:!pandoc -s --lua-filter=/home/petter/playground/pandoc_filter.lua --css file:///home/petter/downloads/github-markdown.css -f markdown -t html -o /tmp/vim-markdown.html /tmp/vim-markdown.md<CR>:!luakit /tmp/vim-markdown.html > /dev/null 2> /dev/null&<CR><CR>
 
-
 let g:tex_flavor = 'latex'
+
+map <F4> :!pdflatex -synctex=1 %<CR>
+function! Synctex()
+    let vimura_param = " --synctex-forward " . line('.') . ":" . col('.') . ":" . expand('%:p') . " " . substitute(expand('%:p'),"tex$","pdf", "")
+    if has('nvim')
+        call jobstart("vimura neovim" . vimura_param)
+    else
+        exe "silent !vimura vim" . vimura_param . "&"
+    endif
+    redraw!
+endfunction
+nmap <C-g> :call Synctex()<cr>
+
+
+"let g:deoplete#enable_at_startup = 1
+
+"au Filetype lua setlocal omnifunc=v:lua.vim.lsp.omnifunc
+"au BufWritePre *.rs lua vim.lsp.buf.formatting_sync(nil, 1000)
+
+"lua require "lsp"
+let g:completion_chain_complete_list = [
+    \{'complete_items': ['lsp', 'snippet']},
+    \{'mode': '<c-p>'},
+    \{'mode': '<c-n>'}
+\]
+
+lua require 'cfg'
