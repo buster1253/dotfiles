@@ -1,0 +1,10 @@
+#!/bin/bash
+OUTPUTS=$(swaymsg -t get_outputs | jq '.[] | .make + " " + .model + " " + .serial')
+
+IFS=$'\n'
+for OUTPUT in $OUTPUTS; do
+	#echo $OUTPUT
+	swaymsg output \'$(echo $OUTPUT | tr -d '"')\' dpms off disable
+done;
+
+swaymsg output eDP-1 enable dpms on

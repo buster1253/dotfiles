@@ -5,18 +5,17 @@ set $up k
 set $right l
 set $swaylock 'swaylock \
 	--screenshot --effect-blur 7x5 --clock --indicator --indicator-radius 100 \
-	--ring-color 8ec07c -f'
+	--ring-color 8ec07c -f --datestr "%a, %d-%m-%Y" --font "Roboto Mono NerdFont normal" --fade-in 0.2'
 #set $swaylock '/usr/bin/lock'
 
 #xwayland enable
 
-set $menu /usr/bin/sway_rofi -show combi
+set $menu sway_rofi -show combi
 set $term 'alacritty'
 
-
-			     #border  │ bg       │  text   │  indicator │ child_border
-client.focused   #BF616A    #BF616A    #ffffff   #BF616A      #5E81AC
-client.unfocused #282828    #282828    #000000   #ea6962      #2E3440
+			            #border  │ bg       │  text   │  indicator │ child_border
+client.focused          #BF616A    #BF616A    #ffffff   #BF616A      #5E81AC
+client.unfocused        #282828    #282828    #000000   #ea6962      #2E3440
 client.focused_inactive #282828    #282828    #000000   #ea6962      #2E3440
 default_border pixel 2px
 
@@ -46,8 +45,14 @@ exec swayidle -w \
 input * {
 	xkb_layout us,no
 	xkb_variant dvp,nodeadkeys
-	xkb_options ctrl:swapcaps
+	xkb_options ctrl:swapcaps,compose:102
 }
+
+output * {
+	background ~/downloads/eagle-nebula.jpg fill
+}
+
+gaps inner 4
 
 #input 1386:789:Wacom_Intuos_Pro_M_Pen map_to_output DP-1
 #input 1386:789:Wacom_Intuos_Pro_M_Pen map_to_region 1920x1080@3840,1920
@@ -108,6 +113,8 @@ bindsym $mod+exclam       workspace $ws8
 bindsym $mod+equal        workspace $ws9
 bindsym $mod+asterisk     workspace $ws10
 
+bindsym $mod+F1           workspace  $wsF1
+
 bindsym $mod+Shift+parenleft    move container to workspace $ws1
 bindsym $mod+Shift+parenright   move container to workspace $ws2
 bindsym $mod+Shift+braceright   move container to workspace $ws3
@@ -118,6 +125,8 @@ bindsym $mod+Shift+bracketleft  move container to workspace $ws7
 bindsym $mod+Shift+exclam       move container to workspace $ws8
 bindsym $mod+Shift+equal        move container to workspace $ws9
 bindsym $mod+Shift+asterisk     move container to workspace $ws10
+
+bindsym $mod+Shift+F1           move container to workspace $wsF1
 
 ## qwerty
 #bindsym $mod+1   workspace $ws1
@@ -165,6 +174,9 @@ bindsym $mod+space focus mode_toggle
 
 # move focus to the parent container
 bindsym $mod+a focus parent
+
+# take a picture
+bindsym $mod+c exec grimshot copy area
 
 bindsym XF86AudioRaiseVolume exec pactl set-sink-volume @DEFAULT_SINK@ +5%
 bindsym XF86AudioLowerVolume exec pactl set-sink-volume @DEFAULT_SINK@ -5%
@@ -217,3 +229,11 @@ bar {
 exec dunst
 
 include /etc/sway/config.d/*
+
+
+mode passthrough {
+	bindsym $mod+Home mode default
+}
+
+bindsym $mod+Home mode passthrough
+
