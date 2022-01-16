@@ -1,0 +1,39 @@
+#!/bin/bash
+
+SWAYLOCK="swaylock -f --screenshot --effect-blur 7x5 --clock \
+	--indicator --indicator-radius 100 --ring-color 8ec07c"
+
+CMD=$(basename -- "$0")
+
+RESUME="output * bg /home/petter/images/touch-2560x1440.jpg"
+
+resume() {
+	MONITOR_COUNT=$(swaymsg -t get_outputs | jq '. | length')
+	if [ "$MONITOR_COUNT" == "1" ]; then
+		swaymsg output eDP-1 enable dpms on
+	fi
+}
+
+$SWAYLOCK
+
+case "$CMD" in
+	"lock")
+		echo "ffff"
+		swaylock -f --screenshot --effect-blur 7x5 --clock \
+			--indicator --indicator-radius 100 --ring-color 8ec07c
+		;;
+	"idle_toggle")
+		PID=$(pidof swayidle)
+		if [ $? == 0 ]; then
+			kill $PID
+		else
+			swayidle -w \
+			timeout 10 "$SWAYLOCK" \
+			timeout 10 'swaymsg "output * dpms off"' \
+				resume 'swaymsg "output * dpms on"' \
+			before-sleep "$SWAYLOCK" \
+			after-resume 'output "*" bg /home/petter/images/touch-2560x1440.jpg fill' &
+		fi
+		;;
+esac
+

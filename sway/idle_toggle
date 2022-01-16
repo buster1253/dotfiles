@@ -1,0 +1,20 @@
+#!/bin/bash
+SWAYLOCK="swaylock -f --screenshot --effect-blur 7x5 --clock \
+	--indicator --indicator-radius 100 --ring-color 8ec07c"
+
+PID=$(pidof swayidle)
+
+if [ $? == 0 ]; then
+	kill $PID
+else
+	exec swayidle -w \
+		timeout 30 "$SWAYLOCK" \
+		timeout 60 'swaymsg "output * dpms off"' \
+			resume 'swaymsg "output * dpms on"' \
+		before-sleep "$SWAYLOCK"
+fi
+# exec swayidle -w \
+#          timeout 300 'swaylock -f -c 000000' \
+#          timeout 600 'swaymsg "output * dpms off"' \
+#               resume 'swaymsg "output * dpms on"' \
+#          before-sleep 'swaylock -f -c 000000'
