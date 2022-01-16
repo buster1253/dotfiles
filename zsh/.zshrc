@@ -9,19 +9,31 @@ export ARCHFLAGS="-arch x86_64"
 export NVIM_LISTEN_ADDRESS=/tmp/nvimsocket
 export WAYLAND_DISPLAY=wayland-1
 export MOZ_ENABLE_WAYLAND=1
+export ANDROID_HOME=/opt/android-sdk/tools
+export VISUAL="$EDITOR" # git-issue: https://github.com/dspinellis/git-issue
+
+# Fix java GUIs being wonky
+export _JAVA_AWT_WM_NONREPARENTING=1
 
 # Path
 PATH=$HOME/.cargo/bin:$PATH              # cargo
 PATH=$HOME/.config/bin:$PATH             # quality of life scripts
+
 if [ -d /opt/cuda/bin ]; then
 	PATH=/opt/cuda/bin:$PATH             # cuda
 fi
+
 if [ -d /usr/local/openresty/bin ]; then # openresty
 	PATH=/usr/local/openresty/bin:$PATH
 fi
+
+if [ -d /opt/android-sdk/tools ]; then
+	PATH=/opt/android-sdk/tools:$PATH
+	PATH=/opt/android-sdk/platform-tools:$PATH
+fi
+
 export PATH=$PATH
 
-export VISUAL="$EDITOR" # git-issue: https://github.com/dspinellis/git-issue
 
 # go into window manager for tty1
 if [[ -z $DISPLAY ]] && [[ $(tty) = /dev/tty1 ]]; then
@@ -72,10 +84,17 @@ zstyle ':completion:*' menu select
 #fi
 
 
+zmodload zsh/parameter
 function powerline_precmd() {
-	PS1=$($HOME/playground/rust/prompt-rs/target/release/powerline-rs)
+    JOBS_COUNT=${#jobstates}
 }
+(( ! ${+precmd_functions} )) && precmd_functions=()
+if [[ -z ${precmd_functions[(re)powerline_precmd]} ]]; then
+	precmd_functions+=(powerline_precmd)
+fi
 precmd_functions+=(powerline_precmd)
+setopt promptsubst
+PROMPT='$("/home/petter/.config/prompt-rs/target/release/prompt-rs" --jobs="$JOBS_COUNT")'
 
 # Uncomment the following line to use case-sensitive completion.
 CASE_SENSITIVE="true"
@@ -149,6 +168,8 @@ alias gl='git log'
 alias gco='git checkout'
 # ez dirs
 alias awc='cd ~/projects/webcore/ansible-webcore-compendium/'
+alias master='cd ~/school/ntnu/A2021/master/'
+alias school='cd ~/school/ntnu/A2021'
 #
 alias cat='bat --theme Nord'
 alias ls='exa'
@@ -189,3 +210,12 @@ fi
 if [ -f /usr/share/nvm/init-nvm.sh ]; then
 	source /usr/share/nvm/init-nvm.sh
 fi
+
+
+proj() {
+	cd ~/projects/$1
+}
+_projlist() {
+	reply=($(find ~/projects/ -maxdepth 2 -type d -mindepth 2 | sed -E 's/.*projects\///'))
+}
+compctl -K _projlist proj
