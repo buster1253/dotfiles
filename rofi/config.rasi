@@ -1,0 +1,20 @@
+configuration {
+	modi: "ssh,combi";
+	font: "Roboto Mono NerdFont 12";
+	bw: 1;
+	terminal: "alacritty";
+	sidebar-mode: true;
+	m: "-4";
+	separator-style: "solid";
+	hide-scrollbar: false;
+	fullscreen: false;
+	kb-remove-char-back: "BackSpace";
+	kb-remove-to-eol: "!Control+k";
+	kb-accept-entry: "Control+m,Return,KP_Enter";
+	kb-mode-next: "Shift+Right,Control+Tab";
+	kb-mode-previous: "Control+h,Shift+Left,Control+ISO_Left_Tab";
+	kb-row-up: "Up,ISO_Left_Tab,Control+p";
+	kb-row-down: "Down,Control+n";
+	kb-cancel: "Escape,Control+g,Control+bracketleft,Control+c";
+}
+@theme "nord.rasi"

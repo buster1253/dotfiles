@@ -17,8 +17,7 @@
 !zsh/zshrc
 !zsh/zshrc
 !rofi
-!rofi/config
-!rofi/nord.rasi
+!rofi/*
 !luakit
 !luakit/*
 !sway
