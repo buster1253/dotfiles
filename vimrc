@@ -59,14 +59,31 @@ Plug 'hrsh7th/nvim-compe'
 Plug 'lervag/vimtex'
 Plug 'lambdalisue/suda.vim'
 
-Plug 'neovim/nvim-lspconfig'
-Plug 'nvim-lua/completion-nvim'
+
+Plug 'fatih/vim-go'
 
 Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
-Plug 'heavenshell/vim-jsdoc', {
-  \ 'for': ['javascript', 'javascript.jsx','typescript'],
-  \ 'do': 'make install'
-\}
+
+" Collection of common configurations for the Nvim LSP client
+Plug 'neovim/nvim-lspconfig'
+" Completion framework
+Plug 'hrsh7th/nvim-cmp'
+" LSP completion source for nvim-cmp
+Plug 'hrsh7th/cmp-nvim-lsp'
+" Snippet completion source for nvim-cmp
+Plug 'hrsh7th/cmp-vsnip'
+" Other usefull completion sources
+Plug 'hrsh7th/cmp-path'
+Plug 'hrsh7th/cmp-buffer'
+" Snippet engine
+Plug 'hrsh7th/vim-vsnip'
+" To enable more of the features of rust-analyzer, such as inlay hints and more!
+Plug 'simrat39/rust-tools.nvim'
+
+
+Plug 'nvim-telescope/telescope.nvim'
+
+
 
 call plug#end()
 " }}}
@@ -84,13 +101,20 @@ augroup end
 augroup tt2
 	autocmd!
 	au BufRead,BufNewFile *.tt2 set filetype=html
-	au FileType html set sw=2
 augroup end
 
 augroup service
 	autocmd!
 	autocmd FileType *.service setlocal filetype=systemd
 augroup end
+
+augroup c_header
+	autocmd!
+	autocmd BufEnter,BufWrite *.h setlocal filetype=c
+augroup end
+let g:c_syntax_for_h = 1
+
+autocmd BufWritePre *.rs lua vim.lsp.buf.formatting_sync(nil, 200)
 
 
 " alternatively start using ~/.vim/ftdetect/ft.vim
@@ -148,7 +172,6 @@ let g:tmuxline_theme = {
 
 " }}}
 
-
 " general settings {{{
 let mapleader = ","
 set laststatus=2       " Always show status bar
@@ -161,8 +184,8 @@ set softtabstop=4
 set shiftwidth=4
 set shiftround
 
-"set completeopt=menuone,noinsert,noselect
-set completeopt=menuone,noselect
+set completeopt=menuone,noinsert,noselect
+"set completeopt=menuone,noselect
 set shortmess+=c
 set autoindent
 set backspace=indent,eol,start
@@ -218,7 +241,7 @@ let g:lsp_cxx_hl_use_text_props = 1
 "let g:pandoc#formatting#textwidth = 80
 "let g:pandoc#command#autoexec_on_writes = 1
 let g:pandoc#command#autoexec_command = 'Pandoc! -F mermaid-filter pdf'
-let g:pandoc#syntax#codeblocks#embeds#langs = ['lua', 'c', 'nginx', 'dot', 'typescript', 'php', 'sql', 'javascript', 'rust']
+let g:pandoc#syntax#codeblocks#embeds#langs = ['lua', 'c', 'nginx', 'dot', 'typescript', 'php', 'sql', 'javascript', 'rust', 'json', 'go']
 
 " vim/nvim specific settings {{{
 if has('nvim')
@@ -256,7 +279,7 @@ au BufReadPost * if line("'\"") > 0 && line("'\"") <= line("$")
 
 let g:termdebug_wide=1
 
-" helpful lines
+" helpful lines {{{
 set textwidth=100
 let &colorcolumn=join(range(101,101),',')
 set cursorline cursorcolumn
@@ -316,7 +339,6 @@ nmap <C-enter> :call Synctex()<cr>
 
 "}}}
 
-
 let g:mkdp_auto_close = 1
 let g:mkdp_auto_start = 0
 let g:mkdp_open_to_world = 0
@@ -324,25 +346,6 @@ let g:mkdp_browser = ''
 let g:mkdp_port = 8080
 
 map <leader>k <Plug>(Man)
-
-nmap <leader>p :w!<CR>:w!/tmp/vim-markdown.md<CR>:!pandoc -s --lua-filter=/home/petter/playground/pandoc_filter.lua --css file:///home/petter/downloads/github-markdown.css -f markdown -t html -o /tmp/vim-markdown.html /tmp/vim-markdown.md<CR>:!luakit /tmp/vim-markdown.html > /dev/null 2> /dev/null&<CR><CR>
-
-let g:tex_flavor = 'latex'
-
-map <F4> :!pdflatex -synctex=1 %<CR>
-function! Synctex()
-    let vimura_param = " --synctex-forward " . line('.') . ":" . col('.') . ":" . expand('%:p') . " " . substitute(expand('%:p'),"tex$","pdf", "")
-    if has('nvim')
-        call jobstart("vimura neovim" . vimura_param)
-    else
-        exe "silent !vimura vim" . vimura_param . "&"
-    endif
-    redraw!
-endfunction
-nmap <C-g> :call Synctex()<cr>
-
-
-"let g:deoplete#enable_at_startup = 1
 
 "au Filetype lua setlocal omnifunc=v:lua.vim.lsp.omnifunc
 "au BufWritePre *.rs lua vim.lsp.buf.formatting_sync(nil, 1000)
