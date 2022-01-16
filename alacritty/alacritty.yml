@@ -18,18 +18,21 @@ scrolling:
 
 font:
   normal:
-    family: RobotoMono Nerd Font
+    #family: RobotoMono Nerd Font
+    family: FiraMono Nerd Font
     style: normal
 
   bold:
-    family: RobotoMono Nerd Font
+    #family: RobotoMono Nerd Font
+    family: FiraMono Nerd Font
     style: Bold
 
   italic:
-    family: RobotoMono Nerd Font
+    #family: RobotoMono Nerd Font
+    family: FiraMono Nerd Font
     style: Italic
 
-  size: 9.0
+  size: 10.0
 
   offset:
     x: 0
@@ -39,7 +42,7 @@ font:
     x: 0
     y: 0
 
-  use_thin_strokes: false
+  use_thin_strokes: true
 
 
 draw_bold_text_with_bright_colors: true
@@ -71,9 +74,38 @@ schemes:
       cyan: '0x8FBCBB'
       white: '0xECEFF4'
 
+  gruvbox: &gruvbox
+    primary:
+      # hard contrast: background = '#1d2021'
+      background: '#282828'
+      # soft contrast: background = '#32302f'
+      foreground: '#ebdbb2'
+
+  # Normal colors
+      normal:
+        black:   '#282828'
+        red:     '#cc241d'
+        green:   '#98971a'
+        yellow:  '#d79921'
+        blue:    '#458588'
+        magenta: '#b16286'
+        cyan:    '#689d6a'
+        white:   '#a89984'
+
+        # Bright colors
+      bright:
+        black:   '#928374'
+        red:     '#fb4934'
+        green:   '#b8bb26'
+        yellow:  '#fabd2f'
+        blue:    '#83a598'
+        magenta: '#d3869b'
+        cyan:    '#8ec07c'
+        white:   '#ebdbb2'
+
   indexed_colors: []
 
-colors: *nord
+colors: *gruvbox
 
 bell:
   animation: EaseOutExpo
@@ -91,7 +123,7 @@ mouse:
 
   hide_when_typing: false
 
-  url:
+  hints:
     launcher: xdg-open
 
     modifiers: None
@@ -309,4 +341,5 @@ key_bindings:
   - { key: NumpadEnter,             chars: "\n"                              }
   - { key: Back,     mods: Control, chars: ""                                }
   - { key: Space,    mods: Alt,     chars: " "                               }
-  - { key: Minus,    mods: Control, chars: ""                 }
+  - { key: Minus,    mods: Control, action: DecreaseFontSize                 }
+  - { key: Equals,   mods: Control, action: ResetFontSize                    }
