@@ -20,8 +20,12 @@
 !rofi/*
 !luakit
 !luakit/*
+
 !sway
 !sway/*
+!kanshi
+!kanshi/*
+
 !alacritty
 !alacritty/*
 !bin
