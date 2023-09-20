@@ -1,6 +1,7 @@
 export ZPLUG_HOME=$HOME/.config/zplug
 export LANG="en_US.UTF-8"
 export EDITOR="nvim"
+# export EDITOR="lvim"
 export TERMINAL="alacritty"
 export MYVIMRC=$HOME/.config/vimrc
 export FZF_DEFAULT_OPTS='--height 80%'
@@ -12,28 +13,35 @@ export MOZ_ENABLE_WAYLAND=1
 export ANDROID_HOME=/opt/android-sdk/tools
 export VISUAL="$EDITOR" # git-issue: https://github.com/dspinellis/git-issue
 
+# for flutter
+export CHROME_EXECUTABLE=google-chrome-stable
+
+source ~/school/ntnu/master/exports.sh
+
 # Fix java GUIs being wonky
 export _JAVA_AWT_WM_NONREPARENTING=1
 
 # Path
-PATH=$HOME/.cargo/bin:$PATH              # cargo
 PATH=$HOME/.config/bin:$PATH             # quality of life scripts
 
-if [ -d /opt/cuda/bin ]; then
-	PATH=/opt/cuda/bin:$PATH             # cuda
-fi
+paths=("/opt/cuda/bin"               \
+	"/usr/local/openresty/bin"         \
+	"/opt/android-sdk/tools"           \
+	"/opt/android-sdk/platform-tools"  \
+	"/home/petter/.gem/ruby/3.0.0/bin" \
+	"/home/petter/.local/bin"          \
+  "/home/petter/.pub-cache/bin"      \
+  "$HOME/.cargo/bin"                 \
+  "$HOME/go/bin"                     \
+)
 
-if [ -d /usr/local/openresty/bin ]; then # openresty
-	PATH=/usr/local/openresty/bin:$PATH
-fi
-
-if [ -d /opt/android-sdk/tools ]; then
-	PATH=/opt/android-sdk/tools:$PATH
-	PATH=/opt/android-sdk/platform-tools:$PATH
-fi
+for p in ${paths[@]}; do
+	if [ -d $p ]; then
+		PATH=$p:$PATH
+	fi
+done
 
 export PATH=$PATH
-
 
 # go into window manager for tty1
 if [[ -z $DISPLAY ]] && [[ $(tty) = /dev/tty1 ]]; then
@@ -43,6 +51,7 @@ if [[ -z $DISPLAY ]] && [[ $(tty) = /dev/tty1 ]]; then
 	fi
 	eval $(ssh-agent)
 	unset WAYLAND_DISPLAY
+  export XDG_CURRENT_DESKTOP="sway"
 	WLR_DRM_NO_MODIFIERS=1 exec sway
 fi
 
@@ -149,9 +158,9 @@ export GPG_TTY=$(tty)
 gpgconf --launch gpg-agent
 
 ## Aliases
-alias vi='vim'
-alias vim='nvim'
-alias nvim='nvim'
+alias vi="$EDITOR"
+alias vim="$EDITOR"
+alias nvim="/usr/bin/nvim"
 #alias ls='ls --color=auto'
 #alias ll='ls -lh'
 alias pac='sudo pacman'
@@ -165,15 +174,16 @@ alias gp='git pull'
 alias pg='git push'
 alias gs='git status'
 alias gl='git log'
+alias gb='git branch'
 alias gco='git checkout'
 # ez dirs
 alias awc='cd ~/projects/webcore/ansible-webcore-compendium/'
-alias master='cd ~/school/ntnu/A2021/master/'
+alias master='cd ~/school/ntnu/master'
 alias school='cd ~/school/ntnu/A2021'
 #
 alias cat='bat --theme Nord'
-alias ls='exa'
-alias ll='exa -al'
+alias ls='eza'
+alias ll='eza -al'
 alias cpy='wl-copy -p'
 alias sshumount='fusermount3 -u'
 
@@ -215,7 +225,29 @@ fi
 proj() {
 	cd ~/projects/$1
 }
+
 _projlist() {
-	reply=($(find ~/projects/ -maxdepth 2 -type d -mindepth 2 | sed -E 's/.*projects\///'))
+  inp=$1
+
+  if [[ "$inp" == */ ]]; then
+    _dir=~/projects/$inp
+    base=""
+  elif [[ $inp != "" ]]; then
+    _dir=$(dirname ~/projects/$inp)
+    base=$(basename $inp)
+  else
+    _dir=~/projects
+    base=""
+  fi
+
+  _reply=($(find $_dir  -maxdepth 1  -mindepth 1 -type d -name "$base*" | sed -E 's/.*projects\///'))
+
+  if [[ ${#_reply[@]} == 1 ]]; then
+    _dir=$_dir/$(basename $_reply)/
+
+    base=""
+  fi
+  reply=($(find $_dir -maxdepth 1 -mindepth 1 -type d -name "$base*" | sed -E 's/.*projects\///'))
 }
+
 compctl -K _projlist proj

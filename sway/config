@@ -151,8 +151,16 @@ bindsym $mod+Shift+F1           move container to workspace $wsF1
 #bindsym $mod+Shift+9 move container to workspace $ws9
 #bindsym $mod+Shift+0 move container to workspace $ws10
 
+
 for_window [app_id="floating"] floating enable
+# Bind applications to workspaces
 for_window [class="Spotify"] move to workspace $ws8
+for_window [class="Slack"] move to workspace $ws4
+for_window [app_id="thunderbird"] move to workspace $ws4
+
+# Autostart applications
+# exec thunderbird
+# exec slack
 
 # Layout stuff:
 bindsym $mod+g splith

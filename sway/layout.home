@@ -1,0 +1,5 @@
+{
+	output eDP-1 mode 1920x1080 position 3640,840 transform normal
+	output DP-4 mode 2560x1440 position 1080,480 transform normal
+	output DP-3 mode 1920x1080 position 0,0 transform 270
+}
