@@ -21,6 +21,8 @@
 !luakit
 !luakit/*
 
+!waybar
+!waybar/*
 !sway
 !sway/*
 !kanshi
