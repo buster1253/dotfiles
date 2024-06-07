@@ -1,30 +1,38 @@
-export ZPLUG_HOME=$HOME/.config/zplug
 export LANG="en_US.UTF-8"
 export EDITOR="nvim"
-# export EDITOR="lvim"
 export TERMINAL="alacritty"
 export MYVIMRC=$HOME/.config/vimrc
 export FZF_DEFAULT_OPTS='--height 80%'
 export XDG_CONFIG_HOME="$HOME/.config"
-export ARCHFLAGS="-arch x86_64"
 export NVIM_LISTEN_ADDRESS=/tmp/nvimsocket
-export WAYLAND_DISPLAY=wayland-1
-export MOZ_ENABLE_WAYLAND=1
 export ANDROID_HOME=/opt/android-sdk/tools
 export VISUAL="$EDITOR" # git-issue: https://github.com/dspinellis/git-issue
-
+export SSH_AUTH_SOCK="$XDG_RUNTIME_DIR/ssh-agent.socket"
 # for flutter
 export CHROME_EXECUTABLE=google-chrome-stable
 
-source ~/school/ntnu/master/exports.sh
+# cpu specific
+arch=$(uname -m)
+if [[ $arch == x86_64* ]]; then
+  export ARCHFLAGS="-arch x86_64"
+fi
 
-# Fix java GUIs being wonky
-export _JAVA_AWT_WM_NONREPARENTING=1
+# OS specific
+os=$(uname -s)
+if [[ $os == "Linux" ]]; then
+  source ./linux.sh
+elif [[ $os == "Darwin" ]]; then
+  source ./macos.sh
+fi
+
+if [ -f /etc/os-release ]; then
+	. /etc/os-release
+	OS=$NAME
+fi
 
 # Path
-PATH=$HOME/.config/bin:$PATH             # quality of life scripts
-
-paths=("/opt/cuda/bin"               \
+paths=( \
+  "/opt/cuda/bin"                    \
 	"/usr/local/openresty/bin"         \
 	"/opt/android-sdk/tools"           \
 	"/opt/android-sdk/platform-tools"  \
@@ -33,6 +41,7 @@ paths=("/opt/cuda/bin"               \
   "/home/petter/.pub-cache/bin"      \
   "$HOME/.cargo/bin"                 \
   "$HOME/go/bin"                     \
+  "$HOME/.config/bin"                \
 )
 
 for p in ${paths[@]}; do
@@ -43,39 +52,11 @@ done
 
 export PATH=$PATH
 
-# go into window manager for tty1
-if [[ -z $DISPLAY ]] && [[ $(tty) = /dev/tty1 ]]; then
-	SSH_AGENT=$(pgrep ssh-agent)
-	if [ -n "$SSH_AGENT" ]; then
-		kill "$SSH_AGENT"
-	fi
-	eval $(ssh-agent)
-	unset WAYLAND_DISPLAY
-  export XDG_CURRENT_DESKTOP="sway"
-	WLR_DRM_NO_MODIFIERS=1 exec sway
-fi
-
-if [ -f /etc/os-release ]; then
-	. /etc/os-release
-	OS=$NAME
-fi
-
-# Install zplug if not installed
-[ ! -d ~/.config/zplug ] \
-	&& git clone https://github.com/zplug/zplug ~/.config/zplug
-source ~/.config/zplug/init.zsh
-
-autoload -Uz comipnit
-compinit
-
-zplug 'zplug/zplug', hook-build:'zplug --self-manage'
-zplug "plugins/colored-man-pages", from:oh-my-zsh
-zplug "plugins/colorize", from:oh-my-zsh
-zplug "zsh-users/zsh-syntax-highlighting", defer:2
-zplug load
-setopt monitor
+source ./zplug.sh
 
 ZLE_RPROMPT_INDENT=0
+
+# History
 HISTFILE=$HOME/.config/zsh/.zsh_history
 HISTSIZE=10000
 SAVEHIST=10000
@@ -88,11 +69,7 @@ export KEYTIMEOUT=1
 # Tab completion menu
 zstyle ':completion:*' menu select
 
-#if [ "$OS" = "Arch Linux" ]; then
-	#source /usr/share/doc/pkgfile/command-not-found.zsh
-#fi
-
-
+# Prompt
 zmodload zsh/parameter
 function powerline_precmd() {
     JOBS_COUNT=${#jobstates}
@@ -104,6 +81,7 @@ fi
 precmd_functions+=(powerline_precmd)
 setopt promptsubst
 PROMPT='$("/home/petter/.config/prompt-rs/target/release/prompt-rs" --jobs="$JOBS_COUNT")'
+
 
 # Uncomment the following line to use case-sensitive completion.
 CASE_SENSITIVE="true"
@@ -150,9 +128,6 @@ CASE_SENSITIVE="true"
 # fi
 # Compilation flags
 
-# ssh
-# export SSH_KEY_PATH="~/.ssh/rsa_id"
-#
 ## GPG (remember to add `use-agent` to gpg.conf)
 export GPG_TTY=$(tty)
 gpgconf --launch gpg-agent
@@ -161,8 +136,6 @@ gpgconf --launch gpg-agent
 alias vi="$EDITOR"
 alias vim="$EDITOR"
 alias nvim="/usr/bin/nvim"
-#alias ls='ls --color=auto'
-#alias ll='ls -lh'
 alias pac='sudo pacman'
 alias lua='rlwrap luajit'
 alias pdf='zathura'
@@ -176,31 +149,59 @@ alias gs='git status'
 alias gl='git log'
 alias gb='git branch'
 alias gco='git checkout'
-# ez dirs
-alias awc='cd ~/projects/webcore/ansible-webcore-compendium/'
-alias master='cd ~/school/ntnu/master'
-alias school='cd ~/school/ntnu/A2021'
-#
-alias cat='bat --theme Nord'
-alias ls='eza'
-alias ll='eza -al'
-alias cpy='wl-copy -p'
 alias sshumount='fusermount3 -u'
+
+if type bat > /dev/null; then
+  alias cat='bat --theme Nord'
+fi
+
+if type eza > /dev/null; then
+  alias ls='eza'
+  alias ll='eza -al'
+else 
+  alias ls='ls'
+  alias ll='ls -al'
+fi
+
+if type wl-copy > /dev/null; then
+  alias cpy='wl-copy -p'
+elif type pbcopy > /dev/null; then
+  alias cpy='pbcopy'
+fi
+
+
+# zoxide
+if type zoxide > /dev/null; then
+  source ~/.config/zsh/zoxide.sh
+fi
 
 # Vi mode
 bindkey -v
 bindkey '^P' up-line-or-history
 bindkey '^N' down-line-or-history
 
+[ -f ~/.config/zsh/.fzf.zsh ] && source ~/.config/zsh/.fzf.zsh
+
 # viman() { text=$(man "$@") && echo "$text" | vim -R +":set ft=man" - ; }
 # quick search
 # rewrite to luakit if anything
 # ffs() { firefox --new-tab "https://duckduckgo.com/?q=$*"; }
 
-rgrep() {
-	grep -rn $1 | sed -e 's/:\([0-9]*\):/ +\1/'
-}
+# rgrep() {
+# 	grep -rn $1 | sed -e 's/:\([0-9]*\):/ +\1/'
+# }
 
+
+if [[ -z "$TMUX" ]]; then
+	tmux -2
+fi
+
+# Node Version manager(nvm)
+if [ -f /usr/share/nvm/init-nvm.sh ]; then
+	source /usr/share/nvm/init-nvm.sh
+fi
+
+# Make zsh fg behave in a usefull manner
 fg() {
 	if [[ $# -eq 1 && $1 = - ]]; then
 		fg %-
@@ -208,19 +209,6 @@ fg() {
 		builtin fg "%$@"
 	fi
 }
-
-[ -f ~/.config/zsh/.fzf.zsh ] && source ~/.config/zsh/.fzf.zsh
-
-
-export SWAYSOCK=/run/user/$(id -u)/sway-ipc.$(id -u).$(pgrep -x sway).sock
-if [[ -z "$TMUX" ]]; then
-	tmux -2
-fi
-
-if [ -f /usr/share/nvm/init-nvm.sh ]; then
-	source /usr/share/nvm/init-nvm.sh
-fi
-
 
 proj() {
 	cd ~/projects/$1
@@ -248,6 +236,10 @@ _projlist() {
     base=""
   fi
   reply=($(find $_dir -maxdepth 1 -mindepth 1 -type d -name "$base*" | sed -E 's/.*projects\///'))
+}
+
+myip() {
+  curl -4 icanhazip.com
 }
 
 compctl -K _projlist proj
