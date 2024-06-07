@@ -80,7 +80,7 @@ style = "Italic"
 
 [font.normal]
 family = "RobotoMono Nerd Font"
-style = "normal"
+style = "Regular"
 
 [font.offset]
 x = 0
