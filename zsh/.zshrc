@@ -85,7 +85,7 @@ if [[ -z ${precmd_functions[(re)powerline_precmd]} ]]; then
 fi
 precmd_functions+=(powerline_precmd)
 setopt promptsubst
-PROMPT='$("$HOME/projects/prompt-rs/target/release/prompt-rs" --jobs="$JOBS_COUNT")'
+PROMPT='$("$HOME/.config/prompt-rs/target/release/prompt-rs" --jobs="$JOBS_COUNT")'
 
 
 # Uncomment the following line to use case-sensitive completion.
