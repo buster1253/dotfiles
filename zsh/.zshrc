@@ -11,6 +11,10 @@ export SSH_AUTH_SOCK="$XDG_RUNTIME_DIR/ssh-agent.socket"
 # for flutter
 export CHROME_EXECUTABLE=google-chrome-stable
 
+if type jenv > /dev/null; then
+  export JAVA_HOME=$(jenv javahome)
+fi
+
 # cpu specific
 arch=$(uname -m)
 if [[ $arch == x86_64* ]]; then
@@ -20,15 +24,16 @@ fi
 # OS specific
 os=$(uname -s)
 if [[ $os == "Linux" ]]; then
-  source ./linux.sh
+  source $HOME/.config/zsh/linux.sh
 elif [[ $os == "Darwin" ]]; then
-  source ./macos.sh
+  source $HOME/.config/zsh/macos.sh
 fi
 
 if [ -f /etc/os-release ]; then
 	. /etc/os-release
 	OS=$NAME
 fi
+
 
 # Path
 paths=( \
@@ -52,7 +57,7 @@ done
 
 export PATH=$PATH
 
-source ./zplug.sh
+source "$HOME/.config/zsh/zplug.sh"
 
 ZLE_RPROMPT_INDENT=0
 
@@ -80,7 +85,7 @@ if [[ -z ${precmd_functions[(re)powerline_precmd]} ]]; then
 fi
 precmd_functions+=(powerline_precmd)
 setopt promptsubst
-PROMPT='$("/home/petter/.config/prompt-rs/target/release/prompt-rs" --jobs="$JOBS_COUNT")'
+PROMPT='$("$HOME/projects/prompt-rs/target/release/prompt-rs" --jobs="$JOBS_COUNT")'
 
 
 # Uncomment the following line to use case-sensitive completion.
@@ -135,7 +140,7 @@ gpgconf --launch gpg-agent
 ## Aliases
 alias vi="$EDITOR"
 alias vim="$EDITOR"
-alias nvim="/usr/bin/nvim"
+#alias nvim="/usr/bin/nvim"
 alias pac='sudo pacman'
 alias lua='rlwrap luajit'
 alias pdf='zathura'
@@ -149,6 +154,9 @@ alias gs='git status'
 alias gl='git log'
 alias gb='git branch'
 alias gco='git checkout'
+alias gbf='gco $(git branch | fzf)'
+alias editmodified='git ls-files -m | fzf --bind "enter:become($EDITOR {})" --preview="git diff {} | delta"'
+
 alias sshumount='fusermount3 -u'
 
 if type bat > /dev/null; then

@@ -15,8 +15,9 @@
 !zsh/.fzf.zsh
 !zsh/.zshrc
 !zsh/zshrc
-!zsh/linux.sh
 !zsh/zplug.sh
+!zsh/linux.sh
+!zsh/macos.sh
 !rofi
 !rofi/*
 !luakit
