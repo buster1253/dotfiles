@@ -10,6 +10,8 @@ export VISUAL="$EDITOR" # git-issue: https://github.com/dspinellis/git-issue
 export SSH_AUTH_SOCK="$XDG_RUNTIME_DIR/ssh-agent.socket"
 # for flutter
 export CHROME_EXECUTABLE=google-chrome-stable
+# set LS_COLORS
+eval $(dircolors)
 
 if type jenv > /dev/null; then
   export JAVA_HOME=$(jenv javahome)
@@ -57,22 +59,35 @@ done
 
 export PATH=$PATH
 
-source "$HOME/.config/zsh/zplug.sh"
+# if type sqlx > /dev/null; then
+#   source $(sqlx completions zsh)
+# fi
+
+#source "$HOME/.config/zsh/zplug.sh"
+source "$HOME/.config/zsh/zinit.sh"
 
 ZLE_RPROMPT_INDENT=0
 
 # History
 HISTFILE=$HOME/.config/zsh/.zsh_history
 HISTSIZE=10000
-SAVEHIST=10000
-setopt HIST_IGNORE_DUPS
-setopt HIST_SAVE_NO_DUPS
+SAVEHIST=$HISTSIZE
+HISTDUP=erase
+setopt appendhistory
+setopt sharehistory
+setopt hist_ignore_space
+setopt hist_ignore_all_dups
+setopt hist_save_no_dups
+setopt hist_ignore_dups
+setopt hist_find_no_dups
 
 # reduce esc delay
 export KEYTIMEOUT=1
 
+
 # Tab completion menu
 zstyle ':completion:*' menu select
+zstyle ':completion:*' list-colors "${(s.:.)LS_COLORS}"
 
 # Prompt
 zmodload zsh/parameter
