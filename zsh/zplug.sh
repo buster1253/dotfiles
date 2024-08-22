@@ -7,6 +7,10 @@ export ZPLUG_HOME=$HOME/.config/zplug
 	git clone https://github.com/zplug/zplug ~/.config/zplug
 source ~/.config/zplug/init.zsh
 
+if [[ -d /opt/homebrew/share/zsh/site-functions ]]; then
+  fpath=(/opt/homebrew/share/zsh/site-functions $fpath)
+fi
+
 autoload -Uz comipnit
 compinit
 

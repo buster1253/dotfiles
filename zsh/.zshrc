@@ -7,11 +7,15 @@ export XDG_CONFIG_HOME="$HOME/.config"
 export NVIM_LISTEN_ADDRESS=/tmp/nvimsocket
 export ANDROID_HOME=/opt/android-sdk/tools
 export VISUAL="$EDITOR" # git-issue: https://github.com/dspinellis/git-issue
-export SSH_AUTH_SOCK="$XDG_RUNTIME_DIR/ssh-agent.socket"
 # for flutter
 export CHROME_EXECUTABLE=google-chrome-stable
+
 # set LS_COLORS
-eval $(dircolors)
+if type dircolors > /dev/null; then
+  eval $(dircolors)
+else
+  export LSCOLORS=GxFxCxDxBxegedabagaced
+fi
 
 if type jenv > /dev/null; then
   export JAVA_HOME=$(jenv javahome)
@@ -39,16 +43,16 @@ fi
 
 # Path
 paths=( \
-  "/opt/cuda/bin"                    \
-	"/usr/local/openresty/bin"         \
-	"/opt/android-sdk/tools"           \
-	"/opt/android-sdk/platform-tools"  \
-	"/home/petter/.gem/ruby/3.0.0/bin" \
-	"/home/petter/.local/bin"          \
-  "/home/petter/.pub-cache/bin"      \
-  "$HOME/.cargo/bin"                 \
-  "$HOME/go/bin"                     \
-  "$HOME/.config/bin"                \
+    "/opt/cuda/bin"                    \
+    "/usr/local/openresty/bin"         \
+    "/opt/android-sdk/tools"           \
+    "/opt/android-sdk/platform-tools"  \
+    "$HOME/.gem/ruby/3.0.0/bin" \
+    "$HOME/.local/bin"          \
+    "$HOME/petter/.pub-cache/bin"      \
+    "$HOME/.cargo/bin"                 \
+    "$HOME/go/bin"                     \
+    "$HOME/.config/bin"                \
 )
 
 for p in ${paths[@]}; do
@@ -74,7 +78,7 @@ HISTSIZE=10000
 SAVEHIST=$HISTSIZE
 HISTDUP=erase
 setopt appendhistory
-setopt sharehistory
+#setopt sharehistory
 setopt hist_ignore_space
 setopt hist_ignore_all_dups
 setopt hist_save_no_dups
