@@ -18,6 +18,8 @@
 !zsh/zplug.sh
 !zsh/linux.sh
 !zsh/macos.sh
+!zsh/zinit.sh
+
 !rofi
 !rofi/*
 !luakit
@@ -40,19 +42,7 @@
 
 
 !nvim
-!nvim/*
-!nvim/init.vim
-!nvim/coc-settings.json
-!nvim/syntax/capnp.vim
-!nvim/syntax/mdown.vim
-!nvim/ftplugin/html.vim
-!nvim/ftplugin/haskell.vim
-!nvim/ftplugin/javascript.vim
-!nvim/ftplugin/typescript.vim
-!nvim/ftplugin/mdown.vim
-!nvim/ftplugin/c.vim
-!nvim/ftplugin/vue.vim
-!nvim/ftplugin/rust.vim
+!nvim/**
 
 !lvim
 !lvim/**

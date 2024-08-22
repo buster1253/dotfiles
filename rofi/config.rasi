@@ -15,6 +15,6 @@ configuration {
 	kb-mode-previous: "Control+h,Shift+Left,Control+ISO_Left_Tab";
 	kb-row-up: "Up,Control+p";
 	kb-row-down: "Down,Control+n";
-	kb-cancel: "Escape,Control+g,Control+bracketleft,Control+c";
+	kb-cancel: "Escape,Control+g,Control+bracketleft";
 }
 @theme "nord.rasi"

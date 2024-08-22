@@ -9,9 +9,9 @@ if command -v rg >/dev/null; then
 	RG="true"
 fi
 
-SCREEN_POS=$(swaymsg -t get_outputs \
-	| jq -r \
-	'.[] | select(.focused).rect | "\(.width)x\(.height)\\+\(.x)\\+\(.y)"')
+SCREEN_POS=$(swaymsg -t get_outputs |
+	jq -r \
+		'.[] | select(.focused).rect | "\(.width)x\(.height)\\+\(.x)\\+\(.y)"')
 
 echo "$SCREEN_POS"
 
@@ -22,17 +22,17 @@ else
 	XWAYLAND_OUTPUT=$(xrandr | rg -oP "[A-Za-z- ]+[0-9]+(?= [a-z]+ $SCREEN_POS)")
 fi
 
-if [ -z "$XWAYLAND_OUTPUT" ] ; then
+if [ -z "$XWAYLAND_OUTPUT" ]; then
 	exec rofi -e "Failed to get XWAYLAND_OUTPUT, likely position inconsistencies \
 between sway and rofi"
 fi
 
 if [ -z "$RG" ]; then
-	MONITOR_ID=$(rofi --help | grep $XWAYLAND_OUTPUT -B1 \
-		| sed -sr '/ID/!d;s/[^:]*:\s([0-9])/\1/')
+	MONITOR_ID=$(rofi --help | grep $XWAYLAND_OUTPUT -B1 |
+		sed -sr '/ID/!d;s/[^:]*:\s([0-9])/\1/')
 else
-	MONITOR_ID=$(rofi --help | rg $XWAYLAND_OUTPUT -B1 \
-		| sed -sr '/ID/!d;s/[^:]*:\s([0-9])/\1/')
+	MONITOR_ID=$(rofi --help | rg $XWAYLAND_OUTPUT -B1 |
+		sed -sr '/ID/!d;s/[^:]*:\s([0-9])/\1/')
 fi
 
 if [ -z "$MONITOR_ID" ]; then

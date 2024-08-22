@@ -3,14 +3,21 @@ set $left h
 set $down j
 set $up k
 set $right l
-set $swaylock 'swaylock \
-	--screenshot --effect-blur 7x5 --clock --indicator --indicator-radius 100 \
-	--ring-color 8ec07c -f --datestr "%a, %d-%m-%Y" --font "Roboto Mono NerdFont normal" --fade-in 0.2'
-#set $swaylock '/usr/bin/lock'
+set $swaylock 'swaylock --color "2B303A" --ring-color 8ec07c -f --font "JetBrainsMono Nerd Font normal"'
 
-#xwayland enable
+xwayland enable
+exec systemctl --user import-environment DISPLAY WAYLAND_DISPLAY SWAYSOCK
+exec hash dbus-update-activation-environment 2>/dev/null && \
+     dbus-update-activation-environment --systemd DISPLAY WAYLAND_DISPLAY SWAYSOCK
 
-set $menu sway_rofi -show combi
+# exec --no-startup-id systemctl --user import-environment DISPLAY DISPLAY_WAYLAND SWAYSOCK
+exec --no-startup-id dbup-update-activation-environment --systemd DISPLAY DISPLAY_WAYLAND SWAYSOCK
+
+# exec systemctl --user import-environment DISPLAY WAYLAND_DISPLAY SWAYSOCK
+# exec hash dbus-update-activation-environment 2>/dev/null && \
+#      dbus-update-activation-environment --systemd DISPLAY WAYLAND_DISPLAY SWAYSOCK
+
+set $menu rofi -show combi
 set $term 'alacritty'
 
 			            #border  │ bg       │  text   │  indicator │ child_border
@@ -19,7 +26,7 @@ client.unfocused        #282828    #282828    #000000   #ea6962      #2E3440
 client.focused_inactive #282828    #282828    #000000   #ea6962      #2E3440
 default_border pixel 2px
 
-font pango:Roboto Mono NerdFont normal 14px
+font pango:JetBrainsMono Nerd Font normal 14px
 
 ## Spotify keybindings
 set $spotify dbus-send --print-reply --dest=org.mpris.MediaPlayer2.spotify \
@@ -35,22 +42,27 @@ bindsym $mod+shift+p exec $spotify_prev
 ## various settings
 tiling_drag disable
 
-exec swayidle -w \
-	timeout 300 $swaylock \
-	timeout 600 'swaymsg "output * dpms off"' \
-		resume 'swaymsg "output * dpms on"' \
-	before-sleep $swaylock \
-	after-resume output * ~/downloads/touch-2560×1440.jpg fill
 
 input * {
 	xkb_layout us,no
 	xkb_variant dvp,nodeadkeys
 	xkb_options ctrl:swapcaps,compose:102
+	dwt enabled
+}
+
+
+input type:touchpad {
+	tap enabled
+	natural_scroll disabled
 }
 
 output * {
-	background ~/downloads/eagle-nebula.jpg fill
+	#background ~/downloads/eagle-nebula.jpg fill
 }
+
+output 'Samsung Electric Company LC32G7xT H4ZT701022' scale 1 mode 2560x1440
+
+output 'California Institute of Technology 0x1418 Unknown' scale 1.5
 
 gaps inner 4
 
@@ -157,6 +169,7 @@ for_window [app_id="floating"] floating enable
 for_window [class="Spotify"] move to workspace $ws8
 for_window [class="Slack"] move to workspace $ws4
 for_window [app_id="thunderbird"] move to workspace $ws4
+for_window [app_id="flameshot"] border pixel 0, floating enable, fullscreen disable, move absolute position 0 0
 
 # Autostart applications
 # exec thunderbird
@@ -190,8 +203,8 @@ bindsym XF86AudioRaiseVolume exec pactl set-sink-volume @DEFAULT_SINK@ +5%
 bindsym XF86AudioLowerVolume exec pactl set-sink-volume @DEFAULT_SINK@ -5%
 bindsym XF86AudioMute exec pactl set-sink-mute @DEFAULT_SINK@ toggle
 bindsym XF86AudioMicMute exec pactl set-source-mute @DEFAULT_SOURCE@ toggle
-bindsym XF86MonBrightnessDown exec brightnessctl set 5%-
-bindsym XF86MonBrightnessUp exec brightnessctl set +5%
+bindsym XF86MonBrightnessDown exec brightnessctl -d intel_backlight set 5%-
+bindsym XF86MonBrightnessUp exec brightnessctl -d intel_backlight set +5%
 
 # Scratchpad:
 # Move the currently focused window to the scratchpad
@@ -234,10 +247,7 @@ bar {
 }
 
 #exec mako
-exec dunst
-
-include /etc/sway/config.d/*
-
+# exec dunst
 
 mode passthrough {
 	bindsym $mod+Home mode default
@@ -245,3 +255,5 @@ mode passthrough {
 
 bindsym $mod+Home mode passthrough
 
+
+include /etc/sway/config.d/*

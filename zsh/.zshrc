@@ -21,6 +21,8 @@ if type jenv > /dev/null; then
   export JAVA_HOME=$(jenv javahome)
 fi
 
+$HOME/.config/zsh/ssh-agent.sh
+
 # cpu specific
 arch=$(uname -m)
 if [[ $arch == x86_64* ]]; then
@@ -78,7 +80,6 @@ HISTSIZE=10000
 SAVEHIST=$HISTSIZE
 HISTDUP=erase
 setopt appendhistory
-#setopt sharehistory
 setopt hist_ignore_space
 setopt hist_ignore_all_dups
 setopt hist_save_no_dups
