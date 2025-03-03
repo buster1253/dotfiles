@@ -13,11 +13,34 @@ require("lazy").setup({
         -- import any extras modules here
         { import = "lazyvim.plugins.extras.lang.typescript" },
         { import = "lazyvim.plugins.extras.lang.json" },
-        -- { import = "lazyvim.plugins.extras.ui.mini-animate" },
         { import = "lazyvim.plugins.extras.formatting.prettier" },
         { import = "lazyvim.plugins.extras.lang.markdown" },
         { import = "lazyvim.plugins.extras.lang.sql" },
         { import = "lazyvim.plugins.extras.lang.yaml" },
+        { import = "lazyvim.plugins.extras.lang.go" },
+        { import = "lazyvim.plugins.extras.lang.rust" },
+        { import = "lazyvim.plugins.extras.dap.core" },
+        {
+            import = "lazyvim.plugins.extras.lang.java",
+            opts = {
+                settings = {
+                    java = {
+                        inlayHints = {
+                            parameterNames = {
+                                enabled = "all",
+                            },
+                        },
+                        format = {
+                            enabled = true,
+                            settings = {
+                                url = "/Users/petterberven/GoogleStyle.xml",
+                                profile = "GoogleStyle",
+                            },
+                        },
+                    },
+                },
+            },
+        },
         {
             import = "lazyvim.plugins.extras.lang.kotlin",
             opts = {
