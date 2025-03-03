@@ -13,3 +13,7 @@ vim.keymap.set("n", "<leader>bn", "<cmd>bnext<cr>", { desc = "Next buffer" })
 vim.keymap.set("n", "<leader>bp", "<cmd>bprev<cr>", { desc = "Prev buffer" })
 
 vim.keymap.set({ "n", "v" }, "<leader>]", ":Gen<CR>")
+
+-- keep search match centered
+vim.keymap.set("n", "n", "n zz", { desc = "Search next" })
+vim.keymap.set("n", "N", "N zz", { desc = "Search prev" })
