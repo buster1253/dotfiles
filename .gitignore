@@ -19,6 +19,7 @@
 !zsh/linux.sh
 !zsh/macos.sh
 !zsh/zinit.sh
+!zsh/ssh-agent.sh
 
 !rofi
 !rofi/*
@@ -40,6 +41,8 @@
 !tmux
 !tmux/tmux.conf
 
+!hypr
+!hypr/*
 
 !nvim
 !nvim/**
